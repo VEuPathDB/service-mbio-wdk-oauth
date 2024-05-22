@@ -14,9 +14,11 @@ COPY --from=node /usr/local/bin /usr/local/bin
 RUN apk upgrade --no-cache
 
 RUN apk add --no-cache \
-  make gcc openssh bash rsync git sed findutils coreutils curl wget gawk jq \
-  perl perl-utils perl-dev expat expat-dev expat-static \
+  bash sed gawk jq findutils coreutils \
+  openssh rsync curl wget git \
+  make gcc \
   apache-ant maven \
+  perl perl-utils perl-dev expat expat-dev expat-static \
   python3 py3-pip py3-six py3-yaml ansible python2
 
 RUN ln -sf python3 /usr/bin/python
