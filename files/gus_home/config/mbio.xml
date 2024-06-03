@@ -1,0 +1,19 @@
+<!--
+Templated by Conifer using
+/var/www/MicrobiomeDB/mbio.b37/gus_home/lib/conifer/roles/conifer/templates/WDK/tomcat_context.xml.j2
+with vars from
+Cohort: Microbiome
+Project: MicrobiomeDB
+Environment: production
+site_vars file: conifer_site_vars.yml
+-->
+
+<!-- context file for deploying webapp into Tomcat -->
+<Context path="/mbio"
+    docBase="/var/www/w2.microbiomedb.org/webapp"
+    privileged="false"
+    swallowOutput="true"
+>
+  <Resources allowLinking="true" />
+  <Parameter name="model" value="MicrobiomeDB"/>
+</Context>

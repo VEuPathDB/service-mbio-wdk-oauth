@@ -1,0 +1,25 @@
+#Templated by Conifer using
+#/var/www/MicrobiomeDB/mbio.b37/gus_home/lib/conifer/roles/conifer/templates/EbrcWebsiteCommon/robots.txt.j2
+#with vars from
+#Cohort: Microbiome
+#Project: MicrobiomeDB
+#Environment: production
+#site_vars file: conifer_site_vars.yml
+
+User-agent: *
+Disallow: /
+Allow: /$
+Allow: /mbio/$
+Allow: /mbio/home.jsp
+Allow: /mbio/app
+Allow: /mbio/app/search/organism/GenomeDataTypes/result*
+Allow: /mbio/app/record/organism/*
+Allow: /mbio/app/search/dataset/AllDatasets/result*
+Allow: /mbio/app/record/dataset/*
+Allow: /mbio/*.js
+Allow: /mbio/*.css
+Allow: /mbio/service/*
+Allow: /mbio/sitemap.xml
+Allow: /mbio/sitemap-*.xml
+
+Sitemap: https://microbiomedb.org/mbio/sitemap.xml

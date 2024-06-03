@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<modelConfig modelName="microbiomeModel"
+             webServiceUrl="local"
+             smtpServer="127.0.0.1"
+             supportEmail="help@veupathdb.org"
+             adminEmail="aurreco@uga.edu, epharper@upenn.edu, dfalke@uga.edu, rdoherty@upenn.edu, sfischer@pcbi.upenn.edu, dmgaldi@upenn.edu"
+             secretKeyFile="%%SECRET_KEY_FILE%%"
+             monitorBlockedThreads="true"
+             blockedThreshold="20"
+             authenticationMethod="oauth2"
+             oauthUrl="%%OAUTH_URL%%"
+             oauthClientId="%%OAUTH_CLIENT_ID%%"
+             oauthClientSecret="%%OAUTH_CLIENT_SECRET%%"
+             changePasswordUrl="%%OAUTH_URL%%/assets/eupathdb-changePassword.html?returnUrl={{returnUrl}}&amp;suggestedUsername={{suggestedUsername}}"
+             keyStoreFile="/etc/pki/java/cacerts"
+             keyStorePassPhrase=""
+             wdkTempDir="/var/tmp/wdk"
+             >
+
+    <queryMonitor
+             baseline="0.1"
+             slow="5"
+             />
+
+    <appDb  login="%%APP_DB_LOGIN%%"
+            password="%%APP_DB_PASSWORD%%"
+            connectionUrl="%%APP_DB_CONNECTION_URL%%"
+            platform="Oracle"
+            userDbLink="ceprodn.login_comment"
+            acctDbLink="acctdbN.profile"
+            maxActive="40"
+            maxIdle="10"
+            minIdle="1"
+            maxWait="50"
+            defaultFetchSize="200"
+            showConnections="false"
+            showConnectionsInterval="10"
+            showConnectionsDuration="600"
+            maxPkColumnWidth="150"
+            driverInitClass="org.eupathdb.common.db.EuPathDbDriverInitializer"
+            />
+
+    <userDb login="%%USER_DB_LOGIN%%"
+            password="%%USER_DB_PASSWORD%%"
+            connectionUrl="%%USER_DB_CONNECTION_URL%%"
+            platform="Oracle"
+            userSchema="userlogins5"
+            maxActive="20"
+            maxIdle="10"
+            minIdle="1"
+            maxWait="50"
+            defaultFetchSize="200"
+            showConnections="false"
+            showConnectionsInterval="10"
+            showConnectionsDuration="600"
+            driverInitClass="org.eupathdb.common.db.EuPathDbDriverInitializer"
+            />
+
+    <userDatasetStore implementation="org.gusdb.wdk.model.user.dataset.irods.IrodsUserDatasetStore">
+      <property name="login">none</property>
+      <property name="password">none</property>
+      <property name="host">irods.eupathdb.org</property>
+      <property name="port">1247</property>
+      <property name="resource">ebrcResc</property>
+      <property name="zone">ebrc</property>
+      <property name="rootPath">/ebrc/workspaces/users</property>
+      <typeHandler type="example" version="1.0" implementation="org.gusdb.wdk.model.user.dataset.ExampleTypeHandler"/>
+      <typeHandler type="BIOM" version="1.0, 2.0, or 2.1" implementation="org.apidb.apicommon.model.userdataset.BiomTypeHandler"/>
+     </userDatasetStore>
+    <emailSubject>
+      <![CDATA[
+        Your MicrobiomeDB Password
+      ]]>
+    </emailSubject>
+
+    <emailContent>
+      <![CDATA[
+        <p>Thank you for registering at MicrobiomeDB.org.</p>
+        <p>Your temporary password is: $$PASSWORD$$</p>
+        <p>You may now login to <a href="https://microbiomedb.org">MicrobiomeDB</a>.</p>
+      ]]>
+    </emailContent>
+</modelConfig>

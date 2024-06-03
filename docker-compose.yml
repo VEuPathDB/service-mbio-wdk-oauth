@@ -1,0 +1,60 @@
+version: '3.5'
+
+services:
+
+  wdk:
+    image: mbio-wdk:${MBIO_WDK_TAG:-latest}
+
+    volumes:
+      - type: bind
+        source: ${API_SITE_WEB_SERVICE_FILES_DIR:-/var/www/Common/apiSiteFilesMirror/webServices}
+        target: ${API_SITE_WEB_SERVICE_FILES_MOUNT:-/webServiceFiles}
+        read_only: true
+      - type: bind
+        source: ${STEP_ANALYSIS_JOBS_DIR:-/var/www/Common/tmp/wdkStepAnalysisJobs}
+        target: ${STEP_ANALYSIS_JOBS_MOUNT:-/stepAnalysisJobs}
+      - type: bind
+        source: ${TOMCAT_LOGS_DIR:-/var/www/Common/logs/tomcat}
+        target: ${TOMCAT_LOGS_MOUNT:-/tomcatLogs}
+      - type: bind
+        source: ${SECRETS_DIR:-/var/www/Common/secrets}
+        target: ${SECRETS_MOUNT:-/secrets}
+        read_only: true
+
+    environment:
+
+      API_SITE_WEB_SERVICE_FILES_DIR: ${API_SITE_WEB_SERVICE_FILES_MOUNT:-/webServiceFiles}
+      STEP_ANALYSIS_JOBS_DIR: ${STEP_ANALYSIS_JOBS_MOUNT:-/stepAnalysisJobs}
+      TOMCAT_LOGS_DIR: ${TOMCAT_LOGS_MOUNT:-/tomcatLogs}
+
+      SECRET_KEY_FILE: ${SECRETS_MOUNT:-/secrets}/${SECRET_KEY_FILENAME:-wdkSecretKey.txt}
+      OAUTH_URL: ${OAUTH_URL}
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+
+      APP_DB_LOGIN: ${APP_DB_LOGIN}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      APP_DB_CONNECTION_URL: ${APP_DB_CONNECTION_URL}
+      
+      USER_DB_LOGIN: ${USER_DB_LOGIN}
+      USER_DB_PASSWORD: ${USER_DB_PASSWORD}
+      USER_DB_CONNECTION_URL: ${USER_DB_CONNECTION_URL}
+
+    networks:
+      - external
+      - traefik
+
+    labels:
+      - "prometheus.scrape_enabled=true"
+      - "com.centurylinklabs.watchtower.enable=${MBIOWDK_WATCHTOWER:-false}"
+      - "traefik.http.services.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.loadbalancer.server.port=${MBIOWDK_SERVER_PORT:-8080}"
+      - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.rule=Host(`${TRAEFIK_MBIOWDK_HOST:-mbiowdk-dev.local.apidb.org}`)"
+      - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.tls=true"
+      - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+      - "traefik.docker.network=traefik"
+
+networks:
+  external:
+    external: true
+  traefik:
+    external: true

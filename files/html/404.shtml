@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+        <title> MicrobiomeDB - Page Not Found </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="/mbio/images/MicrobiomeDB/favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+    <script>
+            window.__asset_path_remove_me_please__ = "/mbio/bundles/";
+
+            window.__SITE_CONFIG__ = {
+                  requireLogin: "false" === "true",
+        rootElement: "#wdk-container",
+        rootUrl: "/mbio/app",
+        endpoint: "/mbio/service",
+        projectId: "MicrobiomeDB",
+        webAppUrl: "/mbio",
+        facebookUrl: "",
+        twitterUrl: "https://twitter.com/MicrobiomeDB",
+        twitterUrl2: "",
+        youtubeUrl: "",
+        redditUrl: "",
+        vimeoUrl: "https://vimeo.com/album/5598563",
+        communitySite: "//static-content.veupathdb.org/",
+        siteSearchServiceUrl: "/site-search",
+                useEda: "true" === "true",
+        edaExampleAnalysesAuthor: "1926010",
+        edaServiceUrl: "/eda",
+                edaEnableFullScreenApps: "true" === "true",
+                        useUserDatasetsWorkspace: "true" === "true",
+        datasetImportUrl: "/dataset-import",
+                showUnreleasedData: "true" === "false",
+                vdiServiceUrl: "/vdi",
+                
+  retainContainerContent: true
+      };
+    </script>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-WG1CJ5Y8J0"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WG1CJ5Y8J0');
+      </script>    <script charset="utf8" src="/mbio/bundles/site-client.bundle.js" ></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/mbio/bundles/site-client.bundle.css"/>
+  </head>
+    <body class="wdk-Body">
+    <div class="main-stack">
+      <div id="wdk-container">
+          
+  <h1>Page Not Found</h1>
+  <p>The requested page could not be found.</p>
+  <p>
+     If you believe the page you requested should exist, please 
+     contact <a href="mailto:help@veupathdb.org" target="_blank">help@veupathdb.org</a> 
+     and please provide the URL you tried to access or a description of what you are 
+     looking for.
+   </p>
+      </div>
+    </div>  </body>
+</html>

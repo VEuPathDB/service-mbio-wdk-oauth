@@ -15,19 +15,13 @@ RUN apk upgrade --no-cache
 
 RUN apk add --no-cache \
   bash sed gawk jq findutils coreutils \
-  openssh rsync curl wget git \
-  make gcc \
+  openssh rsync curl wget git ca-certificates \
+  make build-base gcc \
   apache-ant maven \
-  perl perl-utils perl-dev expat expat-dev expat-static \
-  python3 py3-pip py3-six py3-yaml ansible python2
+  perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig \
+  python3 py3-pip
 
 RUN ln -sf python3 /usr/bin/python
-
-RUN cpan install CPAN::DistnameInfo
-RUN cpan install YAML
-RUN cpan install XML::Simple
-RUN cpan install XML::Parser
-RUN cpan install XML::Twig
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
@@ -36,6 +30,8 @@ ENV GITHUB_USERNAME=$GITHUB_USERNAME
 ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 WORKDIR /workspace
+
+COPY bin bin
 
 COPY project_home project_home
 
@@ -46,7 +42,10 @@ RUN bash ./gus-site-build-deploy/bin/veupath-package-website.sh \
       project_home \
       build \
       MicrobiomePresenters \
-      gus-site-build-deploy/config/webapp.prop
+      gus-site-build-deploy/config/webapp.prop \
+      mbio-site-artifact
+
+RUN stat /workspace/build/mbio-site-artifact.tar.gz
 
 RUN cd /opt \
     && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz \
@@ -54,16 +53,38 @@ RUN cd /opt \
     && mv apache-tomcat-9.0.89 apache-tomcat
 
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+#   Construct Runtime Container
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 FROM amazoncorretto:21-alpine3.15-jdk
 
+# runtime needs
+RUN apk add --no-cache \
+  bash sed gawk jq findutils coreutils \
+  openssh rsync curl wget git ca-certificates \
+  perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig
+
+# install nginx
+COPY --from=prep /workspace/bin /opt/bin
+RUN bash /opt/bin/installNginx.sh
+
+# copy and set up tomcat
 COPY --from=prep /opt/apache-tomcat /opt/apache-tomcat
-COPY --from=prep /workspace/build /build
+RUN chmod 755 /opt/apache-tomcat/bin/*.sh
 
-RUN mkdir /var/www/site.microbiomedb.org && cp /build/*.tar /var/www/site.microbiomedb.org && tar zxvf *.tar
+# copy and set up website artifact
+RUN mkdir -p /var/www/site.microbiomedb.org
+COPY --from=prep /workspace/build/mbio-site-artifact.tar.gz /var/www/site.microbiomedb.org
+RUN stat /var/www/site.microbiomedb.org/mbio-site-artifact.tar.gz
+RUN cd /var/www/site.microbiomedb.org && tar zxvf mbio-site-artifact.tar.gz
 
+# set env
 ENV GUS_HOME=/var/www/site.microbiomedb.org/gus_home
 ENV PATH=$GUS_HOME/bin:$PATH
+ENV CATALINA_HOME=/opt/apache-tomcat
 
 EXPOSE 8080
 
-CMD /opt/tomcat/bin/startup.sh
+CMD /opt/apache-tomcat/bin/startup.sh && exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

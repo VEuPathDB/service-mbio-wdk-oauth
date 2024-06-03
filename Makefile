@@ -1,6 +1,6 @@
 
 PROJECTS_RELEASE_BRANCH = mbio-container
-IMAGE_VERSION = 1.0
+IMAGE_VERSION = latest
 
 docker:
 	bin/cloneProjects.sh $(PROJECTS_RELEASE_BRANCH)
