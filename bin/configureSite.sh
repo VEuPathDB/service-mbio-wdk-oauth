@@ -48,7 +48,7 @@ for path in `find $filesDir`; do
       for var in `env`; do
         # split env output to get keys and values
         varName=$(echo $var | awk -F'=' '{ print $1 }' -)
-        varValue=$(echo $var | awk -F'=' '{ $1=""; print}' -)
+        varValue=$(echo $var | sed "s/$varName\=//")
 
         # escape chars and add custom file macro shell ('%%') to keys
         macro="$(printf '%s\n' "%%${varName}%%" | sed -e 's/[]\/$*.^[]/\\&/g')"

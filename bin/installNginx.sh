@@ -50,7 +50,7 @@ diffs=$(diff /tmp/nginx_signing.rsa.pub.mod /tmp/nginx_signing.rsa.pub.mod.verif
 if [ "$diffs" != "" ]; then
   printf "Public key modulus did not match expected value"
   printf "$diffs"
-  echo 1
+  exit 1
 fi
 
 mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/
