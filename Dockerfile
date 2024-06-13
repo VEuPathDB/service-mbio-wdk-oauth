@@ -19,7 +19,7 @@ RUN apk add --no-cache \
   make build-base gcc \
   apache-ant maven \
   perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig \
-  python3 py3-pip
+  python3 py3-pip py3-six py3-yaml ansible
 
 RUN ln -sf python3 /usr/bin/python
 

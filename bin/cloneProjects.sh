@@ -1,4 +1,14 @@
 #!/bin/bash
+####################################################################
+###
+###  Checks out MicrobiomeDB projects and sets branches as
+###  appropriate for the current build.
+###
+###  NOTE: this is a work in progress; currently can use master
+###    for most projects but some have development branches for
+###    Java 21 + Tomcat 9.x deployment (see below).
+###
+####################################################################
 
 releaseBranch=$1
 if [ "$releaseBranch" = "" ]; then
@@ -22,3 +32,18 @@ fi
 
 echo "Checking out all projects to $releaseBranch"
 tsrc foreach -- git checkout $releaseBranch
+
+j21tc9Projects=(\
+  install \
+  WDK \
+  EbrcWebsiteCommon \
+  MicrobiomeWebsite \
+)
+
+for project in "${j21tc9Projects[@]}"; do
+  echo "Checking out j21tc9 branch of $project"
+  cd $project
+  git pull
+  git checkout j21tc9
+  cd ..
+done

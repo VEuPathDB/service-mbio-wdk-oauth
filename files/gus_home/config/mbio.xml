@@ -10,7 +10,7 @@ site_vars file: conifer_site_vars.yml
 
 <!-- context file for deploying webapp into Tomcat -->
 <Context path="/mbio"
-    docBase="/var/www/w2.microbiomedb.org/webapp"
+    docBase="/var/www/local.microbiomedb.org/webapp"
     privileged="false"
     swallowOutput="true"
 >
