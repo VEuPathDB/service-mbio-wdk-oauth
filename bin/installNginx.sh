@@ -19,6 +19,8 @@ printf "%s%s%s%s\n" \
 
 curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
 
+apk add openssl curl ca-certificates
+
 openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout > /tmp/nginx_signing.rsa.pub.mod
 
 cat << EOF > /tmp/nginx_signing.rsa.pub.mod.verify
@@ -49,10 +51,9 @@ diffs=$(diff /tmp/nginx_signing.rsa.pub.mod /tmp/nginx_signing.rsa.pub.mod.verif
 
 if [ "$diffs" != "" ]; then
   printf "Public key modulus did not match expected value"
-  printf "$diffs"
   exit 1
 fi
 
 mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/
 
-sudo apk add nginx@nginx
+apk add nginx@nginx

@@ -35,6 +35,8 @@ COPY bin bin
 
 COPY project_home project_home
 
+RUN bash /workspace/bin/installNginx.sh
+
 RUN git clone https://github.com/VEuPathDB/gus-site-build-deploy.git
 RUN mkdir build
 
