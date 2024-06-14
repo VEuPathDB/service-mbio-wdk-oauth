@@ -15,14 +15,14 @@ printf "%s%s%s%s\n" \
     "http://nginx.org/packages/alpine/v" \
     `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` \
     "/main" \
-    | sudo tee -a /etc/apk/repositories
+    | tee -a /etc/apk/repositories
 
 curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
 
 openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout > /tmp/nginx_signing.rsa.pub.mod
 
 cat << EOF > /tmp/nginx_signing.rsa.pub.mod.verify
-Public-Key: (2048 bit)
+RSA Public-Key: (2048 bit)
 Modulus:
     00:fe:14:f6:0a:1a:b8:86:19:fe:cd:ab:02:9f:58:
     2f:37:70:15:74:d6:06:9b:81:55:90:99:96:cc:70:
