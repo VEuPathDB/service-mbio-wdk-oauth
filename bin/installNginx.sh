@@ -10,20 +10,18 @@
 ##
 #################################################################################
 
-printf "%s%s%s%s\n" \
-    "@nginx " \
-    "http://nginx.org/packages/alpine/v" \
-    `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` \
-    "/main" \
-    | tee -a /etc/apk/repositories
-
-curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
-
+echo "Installing nginx dependencies..."
 apk add openssl curl ca-certificates
 
-openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout > /tmp/nginx_signing.rsa.pub.mod
+if [ ! -e /etc/apk/keys/nginx_signing.rsa.pub ]; then
 
-cat << EOF > /tmp/nginx_signing.rsa.pub.mod.verify
+  echo "nginx public key not found; fetching and verifying..."
+
+  curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub
+
+  openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout > /tmp/nginx_signing.rsa.pub.mod
+
+  cat << EOF > /tmp/nginx_signing.rsa.pub.mod.verify
 RSA Public-Key: (2048 bit)
 Modulus:
     00:fe:14:f6:0a:1a:b8:86:19:fe:cd:ab:02:9f:58:
@@ -47,13 +45,26 @@ Modulus:
 Exponent: 65537 (0x10001)
 EOF
 
-diffs=$(diff /tmp/nginx_signing.rsa.pub.mod /tmp/nginx_signing.rsa.pub.mod.verify)
+  diffs=$(diff /tmp/nginx_signing.rsa.pub.mod /tmp/nginx_signing.rsa.pub.mod.verify)
 
-if [ "$diffs" != "" ]; then
-  printf "Public key modulus did not match expected value"
-  exit 1
+  if [ "$diffs" != "" ]; then
+    printf "Public key modulus did not match expected value"
+    exit 1
+  fi
+
+  mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/
+
+else
+  echo "nginx public key found. skipping key fetch..."
 fi
 
-mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/
+echo "Adding nginx repo to apk"
+printf "%s%s%s%s\n" \
+    "@nginx " \
+    "http://nginx.org/packages/alpine/v" \
+    `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` \
+    "/main" \
+    | tee -a /etc/apk/repositories
 
+echo "Installing nginx"
 apk add nginx@nginx

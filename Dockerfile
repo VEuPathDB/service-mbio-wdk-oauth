@@ -70,6 +70,7 @@ RUN apk add --no-cache \
 
 # install nginx
 COPY --from=prep /workspace/bin /opt/bin
+COPY --from=prep /etc/apk/keys/nginx_signing.rsa.pub /etc/apk/keys
 RUN bash /opt/bin/installNginx.sh
 
 # copy and set up tomcat
