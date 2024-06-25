@@ -22,7 +22,7 @@ if [ ! -e /etc/apk/keys/nginx_signing.rsa.pub ]; then
   openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout > /tmp/nginx_signing.rsa.pub.mod
 
   cat << EOF > /tmp/nginx_signing.rsa.pub.mod.verify
-RSA Public-Key: (2048 bit)
+Public-Key: (2048 bit)
 Modulus:
     00:fe:14:f6:0a:1a:b8:86:19:fe:cd:ab:02:9f:58:
     2f:37:70:15:74:d6:06:9b:81:55:90:99:96:cc:70:
@@ -48,7 +48,8 @@ EOF
   diffs=$(diff /tmp/nginx_signing.rsa.pub.mod /tmp/nginx_signing.rsa.pub.mod.verify)
 
   if [ "$diffs" != "" ]; then
-    printf "Public key modulus did not match expected value"
+    printf "Public key modulus did not match expected value.  See diffs below:"
+    echo "$diffs"
     exit 1
   fi
 

@@ -14,8 +14,8 @@ services:
         source: ${STEP_ANALYSIS_JOBS_DIR:-/var/www/Common/tmp/wdkStepAnalysisJobs}
         target: ${STEP_ANALYSIS_JOBS_MOUNT:-/stepAnalysisJobs}
       - type: bind
-        source: ${TOMCAT_LOGS_DIR:-/var/www/Common/logs/tomcat}
-        target: ${TOMCAT_LOGS_MOUNT:-/tomcatLogs}
+        source: ${LOGS_DIR:-/var/www/Common/logs}
+        target: ${LOGS_MOUNT:-/opt/logs}
       - type: bind
         source: ${SECRETS_DIR:-/var/www/Common/secrets}
         target: ${SECRETS_MOUNT:-/secrets}
@@ -25,7 +25,8 @@ services:
 
       API_SITE_WEB_SERVICE_FILES_DIR: ${API_SITE_WEB_SERVICE_FILES_MOUNT:-/webServiceFiles}
       STEP_ANALYSIS_JOBS_DIR: ${STEP_ANALYSIS_JOBS_MOUNT:-/stepAnalysisJobs}
-      TOMCAT_LOGS_DIR: ${TOMCAT_LOGS_MOUNT:-/tomcatLogs}
+      TOMCAT_LOGS_DIR: ${LOGS_MOUNT:-/opt/logs}/tomcat
+      NGINX_LOGS_DIR: ${LOGS_MOUNT:-/opt/logs}/nginx
 
       SECRET_KEY_FILE: ${SECRETS_MOUNT:-/secrets}/${SECRET_KEY_FILENAME:-wdkSecretKey.txt}
       OAUTH_URL: ${OAUTH_URL}
