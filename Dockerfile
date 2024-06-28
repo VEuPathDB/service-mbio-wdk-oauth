@@ -3,13 +3,7 @@
 #   Build Service & Dependencies
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-FROM node:14.21.1-alpine3.17 AS node
 FROM amazoncorretto:21-alpine3.17-jdk AS prep
-
-COPY --from=node /usr/lib /usr/lib
-COPY --from=node /usr/local/lib /usr/local/lib
-COPY --from=node /usr/local/include /usr/local/include
-COPY --from=node /usr/local/bin /usr/local/bin
 
 RUN apk upgrade --no-cache
 
@@ -18,11 +12,8 @@ RUN apk add --no-cache \
   openssh rsync curl wget git ca-certificates \
   make build-base gcc \
   apache-ant maven \
-  perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig
-
-#  python3 py3-pip py3-six py3-yaml ansible
-
-# RUN ln -sf python3 /usr/bin/python
+  perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig \
+  nodejs npm
 
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
@@ -32,14 +23,10 @@ ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 WORKDIR /workspace
 
-COPY bin bin
-COPY conf conf
 COPY project_home project_home
 
 RUN git clone https://github.com/VEuPathDB/gus-site-build-deploy.git
 RUN mkdir build
-
-RUN bash /workspace/bin/installNginx.sh
 
 RUN bash ./gus-site-build-deploy/bin/veupath-package-website.sh \
       project_home \
@@ -53,8 +40,19 @@ RUN stat /workspace/build/mbio-site-artifact.tar.gz
 RUN cd /opt \
     && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz \
     && tar zxvf apache-tomcat-9.0.89.tar.gz \
-    && mv apache-tomcat-9.0.89 apache-tomcat
+    && mv apache-tomcat-9.0.89 apache-tomcat \
+    && chmod 755 /opt/apache-tomcat/bin/*.sh \
+    && mkdir -p /opt/apache-tomcat/conf/Catalina/localhost \
+    && rm -rf /opt/apache-tomcat/webapps/docs /opt/apache-tomcat/webapps/examples /opt/apache-tomcat/webapps/manager /opt/apache-tomcat/webapps/host-manager \
+    && curl -o /opt/apache-tomcat/lib/ojdbc11-23.4.0.24.05.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.4.0.24.05/ojdbc11-23.4.0.24.05.jar
 
+COPY bin bin
+COPY conf conf
+COPY files files
+
+# operations requiring bin and conf above
+RUN cp /workspace/conf/tomcat-logging.properties /opt/apache-tomcat/conf/logging.properties
+RUN bash /workspace/bin/installNginx.sh
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
@@ -69,37 +67,39 @@ RUN apk add --no-cache \
   openssh rsync curl wget git ca-certificates \
   perl perl-utils perl-dev perl-yaml perl-xml-simple perl-xml-parser perl-xml-twig
 
-# install nginx
+# set time zone
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/America/New_York /etc/localtime \
+    && echo "America/New_York" > /etc/timezone
+
+# copy needed files
 COPY --from=prep /workspace/bin /opt/bin
+COPY --from=prep /workspace/conf /opt/conf
+COPY --from=prep /workspace/files /opt/files
+
+# install and configure nginx
 COPY --from=prep /etc/apk/keys/nginx_signing.rsa.pub /etc/apk/keys
 RUN bash /opt/bin/installNginx.sh
-
-# copy and set up tomcat
-COPY --from=prep /opt/apache-tomcat /opt/apache-tomcat
-RUN chmod 755 /opt/apache-tomcat/bin/*.sh
-RUN bash -c "if [ ! -e /opt/apache-tomcat/logs ]; then ln -s /opt/logs/tomcat /opt/apache-tomcat/logs; fi"
-
-# copy and set up website artifact
-RUN mkdir -p /var/www/site.microbiomedb.org
-COPY --from=prep /workspace/build/mbio-site-artifact.tar.gz /var/www/site.microbiomedb.org
-RUN stat /var/www/site.microbiomedb.org/mbio-site-artifact.tar.gz
-RUN cd /var/www/site.microbiomedb.org && tar zxvf mbio-site-artifact.tar.gz
-
-# set env
-ENV GUS_HOME=/var/www/site.microbiomedb.org/gus_home
-ENV PATH=$GUS_HOME/bin:$PATH
-ENV CATALINA_HOME=/opt/apache-tomcat
+RUN cp /opt/conf/nginx.conf.alpine /etc/nginx/nginx.conf
+RUN cp /opt/conf/nginx.default.conf.alpine /etc/nginx/conf.d/default.conf
 
 # open nginx to external requests
 EXPOSE 80
-# temporarily open tomcat port for testing
 EXPOSE 8080
 
-# configure nginx
-COPY --from=prep /workspace/conf /opt/conf
-RUN bash /opt/bin/configureNginx.sh /opt/conf/nginx.conf
+# copy and set up tomcat
+COPY --from=prep /opt/apache-tomcat /opt/apache-tomcat
+
+# copy and set up website artifact
+RUN mkdir -p /var/www/local.microbiomedb.org
+COPY --from=prep /workspace/build/mbio-site-artifact.tar.gz /var/www/local.microbiomedb.org
+RUN stat /var/www/local.microbiomedb.org/mbio-site-artifact.tar.gz
+RUN cd /var/www/local.microbiomedb.org && tar zxvf mbio-site-artifact.tar.gz
+
+# set env
+ENV GUS_HOME=/var/www/local.microbiomedb.org/gus_home
+ENV PATH=$GUS_HOME/bin:$PATH
+ENV CATALINA_HOME=/opt/apache-tomcat
 
 # start tomcat and nginx, then infinite loop until container interruption
-CMD /opt/apache-tomcat/bin/startup.sh \
-    && nginx \
-    && exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+CMD bash /opt/bin/startup.sh

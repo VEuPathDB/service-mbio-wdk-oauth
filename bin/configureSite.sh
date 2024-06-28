@@ -16,6 +16,8 @@ for dir in "$1" "$2"; do
   fi
 done
 
+echo "Configuring site..."
+
 # vars for real location names, trimming trailing slashes
 filesDir=`realpath $1`
 siteDir=`realpath $2`
