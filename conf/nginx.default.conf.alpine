@@ -11,6 +11,9 @@ server {
     # Add index.php to the list if you are using PHP
     index index.html index.htm index.nginx-debian.html;
 
+    rewrite ^/$ https://$http_host/mbio/app redirect;
+    rewrite ^/a(.*)$ https://$http_host/mbio$1 redirect;
+
     location / {
         # First attempt to serve request as file, then
         # as directory, then fall back to displaying a 404.
