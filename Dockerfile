@@ -40,7 +40,7 @@ RUN stat /workspace/build/mbio-site-artifact.tar.gz
 
 # clone OAuth project and build war
 RUN git clone https://github.com/VEuPathDB/OAuth2Server.git
-RUN cd /workspace/OAuth2Server && bash EuPathDB/bin/build.sh WEB-INF/OAuthConfig.json
+RUN cd /workspace/OAuth2Server && git checkout j21tc9 && bash EuPathDB/bin/build.sh WEB-INF/OAuthConfig.json
 
 # download Tomcat 9 and make needed modifications
 RUN cd /opt \
