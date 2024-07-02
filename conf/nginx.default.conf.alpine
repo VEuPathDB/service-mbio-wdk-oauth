@@ -20,7 +20,15 @@ server {
         try_files $uri $uri/ =404;
     }
 
+    # route to tomcat for WDK webapp
     location /mbio {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://localhost:8080;
+    }
+
+    # route to tomcat for OAuth webapp
+    location /oauth {
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_pass http://localhost:8080;
