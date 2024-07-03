@@ -52,20 +52,22 @@ jq \
   --arg service_client_id $SERVICE_OAUTH_CLIENT_ID \
   --arg service_client_secret $SERVICE_OAUTH_CLIENT_SECRET '
   . |
-  (.allowedClients[] | select(.clientId == "$wdk_client_id") |  .clientSecrets) = [$wdk_client_secret] |
-  (.allowedClients[] | select(.clientId == "$wdk_client_id") |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
-  (.allowedClients[] | select(.clientId == "$service_client_id") |  .clientSecrets) = [$service_client_secret] |
-  (.allowedClients[] | select(.clientId == "$service_client_id") |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
+  (.allowedClients[] | select(.clientId == $wdk_client_id) |  .clientSecrets) = [$wdk_client_secret] |
+  (.allowedClients[] | select(.clientId == $wdk_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
+  (.allowedClients[] | select(.clientId == $service_client_id) |  .clientSecrets) = [$service_client_secret] |
+  (.allowedClients[] | select(.clientId == $service_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
 
-  .keyStoreFile = "$signing_key_store" |
-  .keyStorePassPhrase = "$signing_key_store_pw" |
-  .authenticatorConfig.login = "$db_login" | 
+  .keyStoreFile = $signing_key_store |
+  .keyStorePassPhrase = $signing_key_store_pw |
+  .authenticatorConfig.login = $db_login | 
   .authenticatorConfig.password = $db_password |
   .authenticatorConfig.connectionUrl = $db_url
 ' \
 $unmodifiedConfig \
 > "WEB-INF/OAuthConfig.json"
 
+echo "Dumping fixed OAuth config..."
+cat WEB-INF/OAuthConfig.json
 
 set -x
 
