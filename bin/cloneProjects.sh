@@ -33,11 +33,14 @@ fi
 echo "Checking out all projects to $releaseBranch"
 tsrc foreach -- git checkout $releaseBranch
 
+git clone https://github.com/VEuPathDB/OAuth2Server.git
+
 j21tc9Projects=(\
   install \
   WDK \
   EbrcWebsiteCommon \
   MicrobiomeWebsite \
+  OAuth2Server \
 )
 
 for project in "${j21tc9Projects[@]}"; do
