@@ -66,9 +66,6 @@ jq \
 $unmodifiedConfig \
 > "WEB-INF/OAuthConfig.json"
 
-echo "Dumping fixed OAuth config..."
-cat WEB-INF/OAuthConfig.json
-
 set -x
 
 # The OAuth2Server configuration file was created and added to WEB-INF in the previous Build step of this job. 

@@ -44,9 +44,9 @@ RUN cd /workspace/OAuth2Server && git checkout j21tc9 && bash EuPathDB/bin/build
 
 # download Tomcat 9 and make needed modifications
 RUN cd /opt \
-    && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz \
-    && tar zxvf apache-tomcat-9.0.89.tar.gz \
-    && mv apache-tomcat-9.0.89 apache-tomcat \
+    && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.91/bin/apache-tomcat-9.0.91.tar.gz \
+    && tar zxvf apache-tomcat-9.0.91.tar.gz \
+    && mv apache-tomcat-9.0.91 apache-tomcat \
     && chmod 755 /opt/apache-tomcat/bin/*.sh \
     && mkdir -p /opt/apache-tomcat/conf/Catalina/localhost \
     && rm -rf /opt/apache-tomcat/webapps/docs /opt/apache-tomcat/webapps/examples /opt/apache-tomcat/webapps/manager /opt/apache-tomcat/webapps/host-manager \
@@ -112,4 +112,4 @@ ENV PATH=$GUS_HOME/bin:$PATH
 ENV CATALINA_HOME=/opt/apache-tomcat
 
 # configure webapps, start tomcat and nginx, then infinite loop until container interruption
-CMD bash /opt/bin/startup.sh
+CMD ["/opt/bin/startup.sh"]

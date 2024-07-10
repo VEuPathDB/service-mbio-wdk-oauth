@@ -12,6 +12,7 @@ server {
     index index.html index.htm index.nginx-debian.html;
 
     rewrite ^/$ https://$http_host/mbio/app redirect;
+    rewrite ^/mbio$ https://$http_host/mbio/app redirect;
     rewrite ^/a(.*)$ https://$http_host/mbio$1 redirect;
 
     location / {
