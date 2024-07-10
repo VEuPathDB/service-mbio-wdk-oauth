@@ -4,15 +4,16 @@
              smtpServer="127.0.0.1"
              supportEmail="help@veupathdb.org"
              adminEmail="aurreco@uga.edu, epharper@upenn.edu, dfalke@uga.edu, rdoherty@upenn.edu, sfischer@pcbi.upenn.edu, dmgaldi@upenn.edu"
-             secretKeyFile="%%SECRET_KEY_FILE%%"
+             secretKeyFile="%%WDK_SECRET_KEY_FILE%%"
              monitorBlockedThreads="true"
              blockedThreshold="20"
              authenticationMethod="oauth2"
-             oauthUrl="%%OAUTH_URL%%"
-             oauthClientId="%%OAUTH_CLIENT_ID%%"
-             oauthClientSecret="%%OAUTH_CLIENT_SECRET%%"
+             oauthUrl="http://localhost:8080/oauth"
+             externalOauthUrl="%%OAUTH_URL%%"
+             oauthClientId="%%WDK_OAUTH_CLIENT_ID%%"
+             oauthClientSecret="%%WDK_OAUTH_CLIENT_SECRET%%"
              changePasswordUrl="%%OAUTH_URL%%/assets/eupathdb-changePassword.html?returnUrl={{returnUrl}}&amp;suggestedUsername={{suggestedUsername}}"
-             keyStoreFile="/secrets/cacerts"
+             keyStoreFile="%%WDK_CACERTS_FILE%%"
              keyStorePassPhrase=""
              wdkTempDir="/var/tmp/wdk"
              >
@@ -55,20 +56,6 @@
             showConnectionsDuration="600"
             driverInitClass="org.eupathdb.common.db.EuPathDbDriverInitializer"
             />
-
-    <!--
-    <userDatasetStore implementation="org.gusdb.wdk.model.user.dataset.irods.IrodsUserDatasetStore">
-      <property name="login">none</property>
-      <property name="password">none</property>
-      <property name="host">irods.eupathdb.org</property>
-      <property name="port">1247</property>
-      <property name="resource">ebrcResc</property>
-      <property name="zone">ebrc</property>
-      <property name="rootPath">/ebrc/workspaces/users</property>
-      <typeHandler type="example" version="1.0" implementation="org.gusdb.wdk.model.user.dataset.ExampleTypeHandler"/>
-      <typeHandler type="BIOM" version="1.0, 2.0, or 2.1" implementation="org.apidb.apicommon.model.userdataset.BiomTypeHandler"/>
-     </userDatasetStore>
-     -->
 
     <emailSubject>
       <![CDATA[
