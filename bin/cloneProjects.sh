@@ -1,13 +1,13 @@
 #!/bin/bash
 ####################################################################
-###
-###  Checks out MicrobiomeDB projects and sets branches as
-###  appropriate for the current build.
-###
-###  NOTE: this is a work in progress; currently can use master
-###    for most projects but some have development branches for
-###    Java 21 + Tomcat 9.x deployment (see below).
-###
+##
+##  Checks out MicrobiomeDB projects and sets branches as
+##  appropriate for the current build.
+##
+##  NOTE: this is a work in progress; currently can use master
+##    for most projects but some have development branches for
+##    Java 21 + Tomcat 9.x deployment (see below).
+##
 ####################################################################
 
 releaseBranch=$1
