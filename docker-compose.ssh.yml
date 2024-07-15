@@ -1,0 +1,60 @@
+version: "3.5"
+services:
+  eda:
+    depends_on:
+      - tunnel_ares14_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
+  tunnel_ares11_penn_apidb_org_1521:
+    image: kroniak/ssh-client:3.19
+    entrypoint:
+      - ssh
+      - -tNn
+      - -p
+      - ${TUNNEL_PORT:?}
+      - -o
+      - ServerAliveInterval=60
+      - -L
+      - ${TUNNEL_ARES11_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES11_PENN_APIDB_ORG_1521:?}:1521
+      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
+    environment:
+      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
+    volumes:
+      - type: bind
+        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
+        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
+      - type: bind
+        source: $HOME/.ssh/known_hosts
+        target: /root/.ssh/known_hosts
+    networks:
+      internal:
+        aliases:
+          - ${TUNNEL_ARES11_PENN_APIDB_ORG_1521:?}
+  tunnel_ares14_penn_apidb_org_1521:
+    image: kroniak/ssh-client:3.19
+    entrypoint:
+      - ssh
+      - -tNn
+      - -p
+      - ${TUNNEL_PORT:?}
+      - -o
+      - ServerAliveInterval=60
+      - -L
+      - ${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}:1521
+      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
+    environment:
+      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
+    volumes:
+      - type: bind
+        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
+        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
+      - type: bind
+        source: $HOME/.ssh/known_hosts
+        target: /root/.ssh/known_hosts
+    networks:
+      internal:
+        aliases:
+          - ${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}
+  wdk:
+    depends_on:
+      - tunnel_ares14_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
