@@ -83,19 +83,19 @@ services:
 
     environment:
       # port providing the service
-      SERVER_PORT: ${DATA_SERVER_PORT:-8080}
+      SERVER_PORT: ${DATA_SERVER_PORT:-80}
 
       # URLs of required services
-      SUBSETTING_SERVICE_URL: ${SUBSETTING_SERVICE_URL:-http://localhost}:${SUBSETTING_SERVER_PORT:-8080}
-      MERGING_SERVICE_URL: ${MERGING_SERVICE_URL:-http://localhost}:${MERGING_SERVER_PORT:-8080}
-      COMPUTE_SERVICE_URL: ${COMPUTE_SERVICE_URL:-http://localhost}:${COMPUTE_SERVER_PORT:-8080}
+      SUBSETTING_SERVICE_URL: ${SUBSETTING_SERVICE_URL:-http://localhost}:${SUBSETTING_SERVER_PORT:-80}
+      MERGING_SERVICE_URL: ${MERGING_SERVICE_URL:-http://localhost}:${MERGING_SERVER_PORT:-80}
+      COMPUTE_SERVICE_URL: ${COMPUTE_SERVICE_URL:-http://localhost}:${COMPUTE_SERVER_PORT:-80}
       RSERVE_URL: ${RSERVE_URL:-http://rserve-internal:6311}
-      DATASET_ACCESS_SERVICE_URL: ${DATASET_ACCESS_SERVICE_URL:-http://localhost}:${DATASET_ACCESS_SERVER_PORT:-8080}
+      DATASET_ACCESS_SERVICE_URL: ${DATASET_ACCESS_SERVICE_URL:-http://localhost}:${DATASET_ACCESS_SERVER_PORT:-80}
 
       # Used for compute, can combine with above in cleanup phase
-      DATASET_ACCESS_HOST: ${DATASET_ACCESS_SERVICE_URL:-http://localhost}:${DATASET_ACCESS_SERVER_PORT:-8080}
-      EDA_MERGE_HOST: ${MERGING_SERVICE_URL:-http://localhost}:${MERGING_SERVER_PORT:-8080}
-      EDA_SUBSETTING_HOST: ${SUBSETTING_SERVICE_URL:-http://localhost}:${SUBSETTING_SERVER_PORT:-8080}
+      DATASET_ACCESS_HOST: ${DATASET_ACCESS_SERVICE_URL:-http://localhost}:${DATASET_ACCESS_SERVER_PORT:-80}
+      EDA_MERGE_HOST: ${MERGING_SERVICE_URL:-http://localhost}:${MERGING_SERVER_PORT:-80}
+      EDA_SUBSETTING_HOST: ${SUBSETTING_SERVICE_URL:-http://localhost}:${SUBSETTING_SERVER_PORT:-80}
 
       # LDAP values to look up DBs
       #LDAP_SERVER: ${LDAP_SERVER}
@@ -266,7 +266,7 @@ services:
     labels:
       - "prometheus.scrape_enabled=true"
       - "com.centurylinklabs.watchtower.enable=${DATA_WATCHTOWER:-false}"
-      - "traefik.http.services.${TRAEFIK_DATA_ROUTER:-edadata-dev}.loadbalancer.server.port=${DATA_SERVER_PORT:-8080}"
+      - "traefik.http.services.${TRAEFIK_DATA_ROUTER:-edadata-dev}.loadbalancer.server.port=${DATA_SERVER_PORT:-80}"
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.rule=Host(`${TRAEFIK_DATA_HOST:-mbio-dev.local.apidb.org}`) && PathPrefix(`/eda`)"
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.tls=${USE_TRAEFIK_SSL:-true}"
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
