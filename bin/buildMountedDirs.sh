@@ -12,9 +12,13 @@
 
 mkdir -p /var/www/Common
 
+cd /var/www
+
 mkdir Common/apiSiteFilesMirror
 mkdir Common/apiSiteFilesMirror/webServices
 mkdir Common/apiSiteFilesMirror/downloadSite
+
+mkdir Common/userDatasets
 
 mkdir Common/secrets
 
