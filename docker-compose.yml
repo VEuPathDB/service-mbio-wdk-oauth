@@ -57,7 +57,11 @@ services:
       ACCT_DB_CONNECTION_URL: ${ACCT_DB_CONNECTION_URL}
 
     networks:
-      - traefik
+      default:
+      traefik:
+      internal:
+        aliases:
+          - oauth-internal
 
     labels:
       - "prometheus.scrape_enabled=true"
@@ -114,18 +118,18 @@ services:
 
       # Account Database
       #ACCT_DB_TNS_NAME: ${ACCT_DB_TNS_NAME}
-      ACCT_DB_HOST: ${APP_DB_HOST}
-      ACCT_DB_PORT: ${APP_DB_PORT}
-      ACCT_DB_NAME: ${APP_DB_NAME}
+      ACCT_DB_HOST: ${ACCT_DB_HOST}
+      ACCT_DB_PORT: ${ACCT_DB_PORT}
+      ACCT_DB_NAME: ${ACCT_DB_NAME}
       ACCT_DB_USER: ${ACCT_DB_USER}
       ACCT_DB_PASS: ${ACCT_DB_PASS}
       ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-3}
 
       # User Database
       #USER_DB_TNS_NAME: ${USER_DB_TNS_NAME}
-      USER_DB_HOST: ${APP_DB_HOST}
-      USER_DB_PORT: ${APP_DB_PORT}
-      USER_DB_NAME: ${APP_DB_NAME}
+      USER_DB_HOST: ${USER_DB_HOST}
+      USER_DB_PORT: ${USER_DB_PORT}
+      USER_DB_NAME: ${USER_DB_NAME}
       USER_DB_USER: ${USER_DB_USER}
       USER_DB_PASS: ${USER_DB_PASS}
       USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-3}
@@ -135,7 +139,7 @@ services:
       AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
 
       # OAuth configuration for fetching user data
-      OAUTH_URL: ${OAUTH_URL}
+      OAUTH_URL: http://oauth-internal/oauth
       OAUTH_CLIENT_ID: ${SERVICE_OAUTH_CLIENT_ID}
       OAUTH_CLIENT_SECRET: ${SERVICE_OAUTH_CLIENT_SECRET}
 
@@ -258,9 +262,10 @@ services:
       ADMIN_AUTH_TOKEN: ${ADMIN_AUTH_TOKEN}     # Auth token
 
     networks:
+      default:
       internal:
         aliases:
-          - data-internal
+          - eda-internal
       traefik:
 
     labels:
@@ -270,6 +275,8 @@ services:
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.rule=Host(`${TRAEFIK_DATA_HOST:-mbio-dev.local.apidb.org}`) && PathPrefix(`/eda`)"
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.tls=${USE_TRAEFIK_SSL:-true}"
       - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
+      - "traefik.http.routers.${TRAEFIK_DATA_ROUTER:-edadata-dev}.middlewares=eda-stripprefix@docker"
+      - "traefik.http.middlewares.eda-stripprefix.stripprefix.prefixes=/eda"
       - "traefik.docker.network=traefik"
 
   compute-queue-db:
