@@ -103,7 +103,7 @@ services:
   #####################
 
   eda:
-    image: eda-service:${EDA_TAG:-latest}
+    image: veupathdb/service-eda:${EDA_TAG:-latest}
 
     volumes:
       - type: bind
