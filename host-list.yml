@@ -5,9 +5,81 @@
 #
 # The 'hosts' map keys MUST be "host:port" pairs.
 hosts:
-  ares14.penn.apidb.org:1521:
+  ds1.apidb.org:389:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ds4.apidb.org:389:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  minio-dev.penn.apidb.org:9000:
+  - vdi
+  ares6.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares8.penn.apidb.org:1521:
   - eda
   - wdk
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares9.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares10.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
   ares11.penn.apidb.org:1521:
   - eda
   - wdk
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares13.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares14.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
