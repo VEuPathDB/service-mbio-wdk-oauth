@@ -140,8 +140,8 @@ services:
       APP_DB_HOST: ${APP_DB_HOST}
       APP_DB_PORT: ${APP_DB_PORT}
       APP_DB_NAME: ${APP_DB_NAME}
-      APP_DB_USER: ${APP_DB_USER}
-      APP_DB_PASS: ${APP_DB_PASS}
+      APP_DB_USER: ${APP_DB_LOGIN}
+      APP_DB_PASS: ${APP_DB_PASSWORD}
       APP_DB_SCHEMA: ${APP_DB_SCHEMA:-eda.}
       APP_DB_POOL_SIZE: ${APP_DB_POOL_SIZE:-20}
       USER_STUDY_SCHEMA: ${USER_STUDY_SCHEMA:-apidbuserdatasets.}
@@ -151,8 +151,8 @@ services:
       ACCT_DB_HOST: ${ACCT_DB_HOST}
       ACCT_DB_PORT: ${ACCT_DB_PORT}
       ACCT_DB_NAME: ${ACCT_DB_NAME}
-      ACCT_DB_USER: ${ACCT_DB_USER}
-      ACCT_DB_PASS: ${ACCT_DB_PASS}
+      ACCT_DB_USER: ${ACCT_DB_LOGIN}
+      ACCT_DB_PASS: ${ACCT_DB_PASSWORD}
       ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-3}
 
       # User Database
@@ -160,8 +160,8 @@ services:
       USER_DB_HOST: ${USER_DB_HOST}
       USER_DB_PORT: ${USER_DB_PORT}
       USER_DB_NAME: ${USER_DB_NAME}
-      USER_DB_USER: ${USER_DB_USER}
-      USER_DB_PASS: ${USER_DB_PASS}
+      USER_DB_USER: ${USER_DB_LOGIN}
+      USER_DB_PASS: ${USER_DB_PASSWORD}
       USER_DB_POOL_SIZE: ${USER_DB_POOL_SIZE:-3}
       USER_DB_SCHEMA: ${USER_DB_SCHEMA:-userlogins5}
 
@@ -422,8 +422,8 @@ services:
 
       # OAuth Configuration
       OAUTH_URL: http://oauth-internal/oauth
-      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
-      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+      OAUTH_CLIENT_ID: ${SERVICE_OAUTH_CLIENT_ID}
+      OAUTH_CLIENT_SECRET: ${SERVICE_OAUTH_CLIENT_SECRET}
 
       # Upload Configuration
       MAX_UPLOAD_FILE_SIZE: ${MAX_UPLOAD_FILE_SIZE}
@@ -431,8 +431,8 @@ services:
 
       # Account DB connection details
       ACCT_DB_TNS_NAME: ${ACCT_DB_TNS_NAME:?}
-      ACCT_DB_USER: ${ACCT_DB_USER:?}
-      ACCT_DB_PASS: ${ACCT_DB_PASS:?}
+      ACCT_DB_USER: ${ACCT_DB_LOGIN:?}
+      ACCT_DB_PASS: ${ACCT_DB_PASSWORD:?}
       ACCT_DB_POOL_SIZE: ${ACCT_DB_POOL_SIZE:-5}
 
       # Hard Delete Handler

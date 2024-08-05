@@ -2,100 +2,44 @@ version: "3.5"
 services:
   eda:
     depends_on:
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-bigwig:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-biom:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-example:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-genelist:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-isasimple:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   plugin-rnaseq:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
-  tunnel_ares6_penn_apidb_org_1521:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_ARES6_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES6_PENN_APIDB_ORG_1521:?}:1521
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_ARES6_PENN_APIDB_ORG_1521:?}
+      - tunnel_ares11_penn_apidb_org_1521
   tunnel_ares8_penn_apidb_org_1521:
     image: kroniak/ssh-client:3.19
     entrypoint:
@@ -122,58 +66,6 @@ services:
       internal:
         aliases:
           - ${TUNNEL_ARES8_PENN_APIDB_ORG_1521:?}
-  tunnel_ares9_penn_apidb_org_1521:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_ARES9_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES9_PENN_APIDB_ORG_1521:?}:1521
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_ARES9_PENN_APIDB_ORG_1521:?}
-  tunnel_ares10_penn_apidb_org_1521:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_ARES10_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES10_PENN_APIDB_ORG_1521:?}:1521
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_ARES10_PENN_APIDB_ORG_1521:?}
   tunnel_ares11_penn_apidb_org_1521:
     image: kroniak/ssh-client:3.19
     entrypoint:
@@ -200,58 +92,6 @@ services:
       internal:
         aliases:
           - ${TUNNEL_ARES11_PENN_APIDB_ORG_1521:?}
-  tunnel_ares13_penn_apidb_org_1521:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_ARES13_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES13_PENN_APIDB_ORG_1521:?}:1521
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_ARES13_PENN_APIDB_ORG_1521:?}
-  tunnel_ares14_penn_apidb_org_1521:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}:1521:${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}:1521
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_ARES14_PENN_APIDB_ORG_1521:?}
   tunnel_ds1_apidb_org_389:
     image: kroniak/ssh-client:3.19
     entrypoint:
@@ -304,45 +144,13 @@ services:
       internal:
         aliases:
           - ${TUNNEL_DS4_APIDB_ORG_389:?}
-  tunnel_minio_dev_penn_apidb_org_9000:
-    image: kroniak/ssh-client:3.19
-    entrypoint:
-      - ssh
-      - -tNn
-      - -p
-      - ${TUNNEL_PORT:?}
-      - -o
-      - ServerAliveInterval=60
-      - -L
-      - ${TUNNEL_MINIO_DEV_PENN_APIDB_ORG_9000:?}:9000:${TUNNEL_MINIO_DEV_PENN_APIDB_ORG_9000:?}:9000
-      - ${TUNNEL_USER:?}@${TUNNEL_HOST:?}
-    environment:
-      SSH_AUTH_SOCK: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-    volumes:
-      - type: bind
-        source: ${SSH_AUTH_SOCKET_SOURCE:-$SSH_AUTH_SOCK}
-        target: ${SSH_AUTH_SOCKET_TARGET:-$SSH_AUTH_SOCK}
-      - type: bind
-        source: $HOME/.ssh/known_hosts
-        target: /root/.ssh/known_hosts
-    networks:
-      default: {}
-      internal:
-        aliases:
-          - ${TUNNEL_MINIO_DEV_PENN_APIDB_ORG_9000:?}
   vdi:
     depends_on:
-      - tunnel_ares6_penn_apidb_org_1521
       - tunnel_ds1_apidb_org_389
-      - tunnel_ares9_penn_apidb_org_1521
-      - tunnel_ares14_penn_apidb_org_1521
-      - tunnel_ares10_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ds4_apidb_org_389
-      - tunnel_ares13_penn_apidb_org_1521
-      - tunnel_minio_dev_penn_apidb_org_9000
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521
   wdk:
     depends_on:
-      - tunnel_ares11_penn_apidb_org_1521
       - tunnel_ares8_penn_apidb_org_1521
+      - tunnel_ares11_penn_apidb_org_1521

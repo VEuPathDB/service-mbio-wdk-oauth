@@ -1,0 +1,83 @@
+# Each entry in the 'hosts' map is an array of container definitions that depend
+# on access to that host.  The entries in the list should be the names of the
+# dependent containers as defined in the primary docker-compose 'services' block
+# or blocks.
+#
+# The 'hosts' map keys MUST be "host:port" pairs.
+hosts:
+  ds1.apidb.org:389:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ds4.apidb.org:389:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares6.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares8.penn.apidb.org:1521:
+  - eda
+  - wdk
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares9.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares10.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares11.penn.apidb.org:1521:
+  - eda
+  - wdk
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares13.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
+  ares14.penn.apidb.org:1521:
+  - vdi
+  - plugin-bigwig
+  - plugin-biom
+  - plugin-example
+  - plugin-genelist
+  - plugin-isasimple
+  - plugin-rnaseq
