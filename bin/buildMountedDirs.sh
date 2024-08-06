@@ -31,5 +31,8 @@ mkdir Common/logs
 mkdir Common/logs/nginx
 mkdir Common/logs/tomcat
 
+mkdir Common/persistentData
+mkdir Common/persistentData/minio
+
 mkdir Common/tmp
 mkdir Common/tmp/wdkStepAnalysisJobs
