@@ -5,11 +5,8 @@ awaitWebapp() {
   url=$2
   echo "Waiting for $webapp, will check $url"
   for attempts in {1..20}; do
-    echo "Head response:"
-    curl --head $url
-    echo "Finding status in response:"
-    status=$(curl --head $url | tac | tac | head -1 | awk '{ print $2 }')
-    echo "$webapp attempt ${attempts}: Status is $status from $url"
+    status=$(curl --head --no-progress-meter $url | tac | tac | head -1 | awk '{ print $2 }')
+    echo "$webapp attempt ${attempts}: Status is <$status> from $url"
     if [ "$status" = "200" ]; then
       echo "$webapp is responding."
       return 0
@@ -21,7 +18,13 @@ awaitWebapp() {
 }
 
 shutdown() {
-  echo "Shutting down application..."
+  trap SIGINT
+  echo "Shutting down application..." > /opt/logs
+  nginx -s stop
+  /opt/apache-tomcat/bin/shutdown.sh
+  # give webapps a reasonable amount of time to shut down
+  sleep 5
+  exit
 }
 
 mkdir -p /opt/logs/tomcat /opt/logs/nginx \
@@ -36,5 +39,5 @@ mkdir -p /opt/logs/tomcat /opt/logs/nginx \
     && echo "WDK webapp deployed.  Starting up nginx" \
     && nginx \
     && echo "Services running..." \
-    && trap "shutdown; exit" SIGTERM SIGINT \
+    && trap "shutdown" TERM \
     && (sleep infinity & wait)

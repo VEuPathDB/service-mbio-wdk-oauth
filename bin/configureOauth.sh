@@ -72,6 +72,5 @@ set -x
 # The OAuth2Server configuration file was created and added to WEB-INF in the previous Build step of this job. 
 # Now copy the contents of WEB-INF into the war file before deployment.
 
-cat WEB-INF/OAuthConfig.json
 jar -uf $warFile WEB-INF
 
