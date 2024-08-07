@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+trap gracefulShutdown EXIT
 
 awaitWebapp() {
   webapp=$1
   url=$2
+  sleep 3
   echo "Waiting for $webapp, will check $url"
   for attempts in {1..20}; do
     status=$(curl --head --no-progress-meter $url | tac | tac | head -1 | awk '{ print $2 }')
@@ -17,9 +20,8 @@ awaitWebapp() {
   return 1
 }
 
-shutdown() {
-  trap SIGINT
-  echo "Shutting down application..." > /opt/logs
+gracefulShutdown() {
+  echo "Shutting down application..." > /opt/logs/exit-catch.log
   nginx -s stop
   /opt/apache-tomcat/bin/shutdown.sh
   # give webapps a reasonable amount of time to shut down
@@ -27,10 +29,10 @@ shutdown() {
   exit
 }
 
-mkdir -p /opt/logs/tomcat /opt/logs/nginx \
+echo "Starting up WDK and OAuth services..." \
+    && mkdir -p /opt/logs/tomcat /opt/logs/nginx \
     && /opt/bin/configureOauth.sh \
     && /opt/apache-tomcat/bin/startup.sh \
-    && sleep 3 \
     && awaitWebapp OAuth "http://localhost:8080/oauth/discovery" \
     && echo "OAuth webapp deployed; Deploying WDK webapp..." \
     && /opt/bin/configureSite.sh /opt/files /var/www/local.microbiomedb.org \
@@ -39,5 +41,4 @@ mkdir -p /opt/logs/tomcat /opt/logs/nginx \
     && echo "WDK webapp deployed.  Starting up nginx" \
     && nginx \
     && echo "Services running..." \
-    && trap "shutdown" TERM \
-    && (sleep infinity & wait)
+    && exec bash -c 'sleep infinity & wait'
