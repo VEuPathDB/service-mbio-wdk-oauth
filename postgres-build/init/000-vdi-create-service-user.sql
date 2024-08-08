@@ -1,0 +1,3 @@
+
+CREATE USER vdi_w;
+CREATE USER gus_r;

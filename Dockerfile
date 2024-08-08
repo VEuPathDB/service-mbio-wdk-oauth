@@ -42,6 +42,8 @@ RUN stat /workspace/build/mbio-site-artifact.tar.gz
 RUN cp -r project_home/OAuth2Server .
 RUN cd /workspace/OAuth2Server && bash EuPathDB/bin/build.sh WEB-INF/OAuthConfig.json
 
+RUN echo "stub"
+
 # download Tomcat 9 and make needed modifications
 RUN cd /opt \
     && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz \
@@ -50,7 +52,8 @@ RUN cd /opt \
     && chmod 755 /opt/apache-tomcat/bin/*.sh \
     && mkdir -p /opt/apache-tomcat/conf/Catalina/localhost \
     && rm -rf /opt/apache-tomcat/webapps/docs /opt/apache-tomcat/webapps/examples /opt/apache-tomcat/webapps/manager /opt/apache-tomcat/webapps/host-manager \
-    && curl -o /opt/apache-tomcat/lib/ojdbc11-23.4.0.24.05.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.4.0.24.05/ojdbc11-23.4.0.24.05.jar
+    && curl -o /opt/apache-tomcat/lib/ojdbc11-23.4.0.24.05.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.4.0.24.05/ojdbc11-23.4.0.24.05.jar \
+    && curl -o /opt/apache-tomcat/lib/postgresql-42.7.3.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar
 
 # copy remaining setup files into container
 COPY bin bin
