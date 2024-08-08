@@ -86,6 +86,9 @@ services:
       ACCT_DB_PLATFORM: ${ACCT_DB_PLATFORM}
       
 
+    depends_on:
+      - edapostgres
+
     networks:
       default:
       traefik:
@@ -101,6 +104,37 @@ services:
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.tls=true"
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
       - "traefik.docker.network=traefik"
+
+
+  #####################
+  ####  Database   ####
+  #####################
+  edapostgres:
+    build:
+      context: ./postgres-build
+    environment:
+      POSTGRES_USER: ${USER_DB_USER:?}
+      POSTGRES_PASSWORD: ${USER_DB_PASS:?}
+      POSTGRES_DB: eda
+      PGPORT: 5434
+      VDI_SCHEMA_SUFFIX: ${VDI_SCHEMA_SUFFIX}
+      VDI_DB_PASSWD: ${USER_DB_PASS:?}
+
+    networks:
+      - internal
+    volumes:
+      - type: bind
+        source: ${POSTGRES_DATA_DIR}
+        target: /var/lib/postgresql/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${VDI_POSTGRES_WATCHTOWER:-false}"
+    ports:
+      - 5434:5434
+    healthcheck:
+      test: [ "nc", "-zv", "localhost", "5434" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 
   #####################
@@ -387,6 +421,7 @@ services:
     image: veupathdb/vdi-service:${VDI_SERVICE_TAG:-latest}
     depends_on:
     - cache-db
+    - edapostgres
     - kafka
     - plugin-biom
     links:
@@ -553,7 +588,7 @@ services:
 
       DB_CONNECTION_ENABLED_MICROBIOME: ${DB_CONNECTION_ENABLED_MICROBIOME}
       DB_CONNECTION_NAME_MICROBIOME: ${DB_CONNECTION_NAME_MICROBIOME:?}
-      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME:?}
+      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME}
       DB_CONNECTION_PASS_MICROBIOME: ${DB_CONNECTION_PASS_MICROBIOME:?}
       DB_CONNECTION_DATA_SCHEMA_MICROBIOME: ${DB_CONNECTION_DATA_SCHEMA_MICROBIOME:-vdi_datasets_${VDI_SCHEMA_SUFFIX}}
       DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME: ${DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME:-vdi_control_${VDI_SCHEMA_SUFFIX}}

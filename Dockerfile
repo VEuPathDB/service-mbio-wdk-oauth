@@ -42,6 +42,8 @@ RUN stat /workspace/build/mbio-site-artifact.tar.gz
 RUN cp -r project_home/OAuth2Server .
 RUN cd /workspace/OAuth2Server && bash EuPathDB/bin/build.sh WEB-INF/OAuthConfig.json
 
+RUN echo "stub"
+
 # download Tomcat 9 and make needed modifications
 RUN cd /opt \
     && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz \
