@@ -30,11 +30,13 @@ verify "ACCT_DB_LOGIN" "${ACCT_DB_LOGIN}"
 verify "ACCT_DB_PASSWORD" "${ACCT_DB_PASSWORD}"
 verify "OAUTH_SIGNING_KEY_STORE" "${OAUTH_SIGNING_KEY_STORE}"
 verify "OAUTH_SIGNING_KEY_STORE_PW" "${OAUTH_SIGNING_KEY_STORE_PW}"
+verify "OAUTH_DB_PLATFORM" "${OAUTH_DB_PLATFORM}"
 
 echo "Configuring OAuth Service with:"
 echo "AccountDB: ${ACCT_DB_CONNECTION_URL}"
 echo "WDK Client ID: ${WDK_OAUTH_CLIENT_ID}"
 echo "Service Client ID: ${SERVICE_OAUTH_CLIENT_ID}"
+echo "DB Platform" "${OAUTH_DB_PLATFORM}"
 
 # DO NOT ECHO LOGIN CREDENTIALS TO STDOUT (set +x)
 set +x
@@ -51,22 +53,25 @@ jq \
   --arg wdk_client_id $WDK_OAUTH_CLIENT_ID \
   --arg wdk_client_secret $WDK_OAUTH_CLIENT_SECRET \
   --arg service_client_id $SERVICE_OAUTH_CLIENT_ID \
-  --arg service_client_secret $SERVICE_OAUTH_CLIENT_SECRET '
+  --arg service_client_secret $SERVICE_OAUTH_CLIENT_SECRET \
+  --arg oauth_db_platform $OAUTH_DB_PLATFORM '
   . |
   (.allowedClients[] | select(.clientId == $wdk_client_id) |  .clientSecrets) = [$wdk_client_secret] |
   (.allowedClients[] | select(.clientId == $wdk_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
   (.allowedClients[] | select(.clientId == $service_client_id) |  .clientSecrets) = [$service_client_secret] |
   (.allowedClients[] | select(.clientId == $service_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
-
+  (.allowedClients[] | select(.clientId == $service_client_id) |  .clientSecrets) = [$service_client_secret] |
   .keyStoreFile = $signing_key_store |
   .keyStorePassPhrase = $signing_key_store_pw |
   .authenticatorConfig.login = $db_login | 
   .authenticatorConfig.password = $db_password |
-  .authenticatorConfig.connectionUrl = $db_url
+  .authenticatorConfig.connectionUrl = $db_url |
+  .authenticatorConfig.platform = $oauth_db_platform
 ' \
 $unmodifiedConfig \
 > "WEB-INF/OAuthConfig.json"
 
+rm -f WEB-INF/OAuthSampleConfig.json
 set -x
 
 # The OAuth2Server configuration file was created and added to WEB-INF in the previous Build step of this job. 
