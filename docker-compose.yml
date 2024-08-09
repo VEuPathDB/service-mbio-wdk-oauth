@@ -55,7 +55,7 @@ services:
       WDK_CACERTS_FILE: ${SECRETS_MOUNT:-/secrets}/${WDK_CACERTS_FILENAME:-cacerts}
       OAUTH_SIGNING_KEY_STORE: ${SECRETS_MOUNT:-/secrets}/${OAUTH_SIGNING_KEY_STORE_FILENAME:-oauth-keys.pkcs12}
       OAUTH_SIGNING_KEY_STORE_PW: ${OAUTH_SIGNING_KEY_STORE_PW}
-      OAUTH_DB_PLATFORM: PostgreSQL
+      OAUTH_DB_PLATFORM: ${OAUTH_DB_PLATFORM}
 
       # oauth contact information
       OAUTH_URL: ${OAUTH_URL}
@@ -68,6 +68,7 @@ services:
       APP_DB_LOGIN: ${APP_DB_LOGIN}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD}
       APP_DB_CONNECTION_URL: ${APP_DB_CONNECTION_URL}
+      APP_DB_PLATFORM: ${APP_DB_PLATFORM}
 
       # VDI user dataset schemas (env vars borrowed from VDI config)
       VDI_CONTROL_SCHEMA: ${DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME:-vdi_control_${VDI_SCHEMA_SUFFIX}}
@@ -77,14 +78,14 @@ services:
       USER_DB_LOGIN: ${USER_DB_LOGIN}
       USER_DB_PASSWORD: ${USER_DB_PASSWORD}
       USER_DB_CONNECTION_URL: ${USER_DB_CONNECTION_URL}
+      USER_DB_PLATFORM: ${USER_DB_PLATFORM}
 
       # account db (oauth)
       ACCT_DB_LOGIN: ${ACCT_DB_LOGIN}
       ACCT_DB_PASSWORD: ${ACCT_DB_PASSWORD}
       ACCT_DB_CONNECTION_URL: ${ACCT_DB_CONNECTION_URL}
-
-    depends_on:
-      - edapostgres
+      ACCT_DB_PLATFORM: ${ACCT_DB_PLATFORM}
+      
 
     networks:
       default:
@@ -101,36 +102,6 @@ services:
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.tls=true"
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
       - "traefik.docker.network=traefik"
-
-  #####################
-  ####  Database   ####
-  #####################
-  edapostgres:
-    build:
-      context: ./postgres-build
-    environment:
-      POSTGRES_USER: ${USER_DB_USER:?}
-      POSTGRES_PASSWORD: ${USER_DB_PASS:?}
-      POSTGRES_DB: eda
-      PGPORT: 5434
-      VDI_SCHEMA_SUFFIX: ${VDI_SCHEMA_SUFFIX}
-      VDI_DB_PASSWD: ${USER_DB_PASS:?}
-
-    networks:
-      - internal
-    volumes:
-      - type: bind
-        source: ${POSTGRES_DATA_DIR}
-        target: /var/lib/postgresql/data
-    labels:
-      - "com.centurylinklabs.watchtower.enable=${VDI_POSTGRES_WATCHTOWER:-false}"
-    ports:
-      - 5434:5434
-    healthcheck:
-      test: [ "nc", "-zv", "localhost", "5434" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
 
   #####################
@@ -183,7 +154,7 @@ services:
       USER_STUDY_SCHEMA: ${USER_STUDY_SCHEMA:-vdi_datasets_${VDI_SCHEMA_SUFFIX}}
 
       # Account Database
-      #ACCT_DB_TNS_NAME: ${ACCT_DB_TNS_NAME}
+      ACCT_DB_TNS_NAME: ${ACCT_DB_TNS_NAME}
       ACCT_DB_HOST: ${ACCT_DB_HOST}
       ACCT_DB_PORT: ${ACCT_DB_PORT}
       ACCT_DB_NAME: ${ACCT_DB_NAME}
@@ -597,7 +568,7 @@ services:
 
       DB_CONNECTION_ENABLED_MICROBIOME: ${DB_CONNECTION_ENABLED_MICROBIOME}
       DB_CONNECTION_NAME_MICROBIOME: ${DB_CONNECTION_NAME_MICROBIOME:?}
-      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME}
+      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME:?}
       DB_CONNECTION_PASS_MICROBIOME: ${DB_CONNECTION_PASS_MICROBIOME:?}
       DB_CONNECTION_DATA_SCHEMA_MICROBIOME: ${DB_CONNECTION_DATA_SCHEMA_MICROBIOME:-vdi_datasets_${VDI_SCHEMA_SUFFIX}}
       DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME: ${DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME:-vdi_control_${VDI_SCHEMA_SUFFIX}}
