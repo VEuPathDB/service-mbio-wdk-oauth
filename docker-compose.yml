@@ -84,10 +84,6 @@ services:
       ACCT_DB_PASSWORD: ${ACCT_DB_PASSWORD}
       ACCT_DB_CONNECTION_URL: ${ACCT_DB_CONNECTION_URL}
       ACCT_DB_PLATFORM: ${ACCT_DB_PLATFORM}
-      
-
-    depends_on:
-      - edapostgres
 
     networks:
       default:
@@ -104,7 +100,6 @@ services:
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.tls=true"
       - "traefik.http.routers.${TRAEFIK_MBIOWDK_ROUTER:-mbiowdk-dev}.entrypoints=${TRAEFIK_ENTRYPOINTS:-local}"
       - "traefik.docker.network=traefik"
-
 
   #####################
   ####  Database   ####
@@ -135,7 +130,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
 
   #####################
   #### EDA Services ###
@@ -588,7 +582,7 @@ services:
 
       DB_CONNECTION_ENABLED_MICROBIOME: ${DB_CONNECTION_ENABLED_MICROBIOME}
       DB_CONNECTION_NAME_MICROBIOME: ${DB_CONNECTION_NAME_MICROBIOME:?}
-      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME}
+      DB_CONNECTION_LDAP_MICROBIOME: ${DB_CONNECTION_LDAP_MICROBIOME:?}
       DB_CONNECTION_PASS_MICROBIOME: ${DB_CONNECTION_PASS_MICROBIOME:?}
       DB_CONNECTION_DATA_SCHEMA_MICROBIOME: ${DB_CONNECTION_DATA_SCHEMA_MICROBIOME:-vdi_datasets_${VDI_SCHEMA_SUFFIX}}
       DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME: ${DB_CONNECTION_CONTROL_SCHEMA_MICROBIOME:-vdi_control_${VDI_SCHEMA_SUFFIX}}
