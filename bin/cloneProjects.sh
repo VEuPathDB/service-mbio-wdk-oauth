@@ -46,7 +46,7 @@ projects=(\
 for project in "${projects[@]}"; do
   if [ -d $project ]; then
     echo "Skipping clone of ${project}; already exists"
-    echo "Checking out master branch of $project
+    echo "Checking out master branch of $project"
     cd $project
     git pull
     git checkout master
