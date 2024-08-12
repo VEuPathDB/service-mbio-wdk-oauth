@@ -415,7 +415,6 @@ services:
     image: veupathdb/vdi-service:${VDI_SERVICE_TAG:-latest}
     depends_on:
     - cache-db
-    - edapostgres
     - kafka
     - plugin-biom
     links:
