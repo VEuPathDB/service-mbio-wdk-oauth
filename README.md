@@ -23,9 +23,13 @@ To access the deployed website, Traefik is used with a domain that resolves via 
 3. Run `make docker` or, if you've made recent changes,  `make dockernocache`.
 4. This will create a local docker image for WDK/OAuth tagged with `mbio-wdk:latest`.  If you want to run this image remotely you will have to take care of deploying it to DockerHub or another repository.
 
-## Compose Stack Configuration (runtime environment files)
+## Host Machine Setup
 
-Before deploying the application, you must build a configuration file.  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control.  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy the `env.dev.<platform>.sample` file of your choice to `env.dev.<platform>.custom` and populate the values for the variables within.
+The stand-alone MicrobiomeDB docker compose stack relies heavily on bind mounts to directories on the parent machine.  
+
+## Compose Stack Configuration (runtime environment and configuration files)
+
+Before deploying the application, you must build a set of configuration files.  This se  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control.  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy the `env.dev.<platform>.sample` file of your choice to `env.dev.<platform>.custom` and populate the values for the variables within.
 
 ### Oracle (while VEuPathDB still exists)
 
