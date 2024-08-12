@@ -50,3 +50,8 @@ for project in "${j21tc9Projects[@]}"; do
   git checkout j21tc9
   cd ..
 done
+
+cd EbrcModelCommon
+git pull
+git checkout standalone-mbio-postgres
+cd ..

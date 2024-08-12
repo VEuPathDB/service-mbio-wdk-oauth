@@ -60,7 +60,6 @@ jq \
   (.allowedClients[] | select(.clientId == $wdk_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
   (.allowedClients[] | select(.clientId == $service_client_id) |  .clientSecrets) = [$service_client_secret] |
   (.allowedClients[] | select(.clientId == $service_client_id) |  .clientDomains) = ["*.amoebadb.org","*.apidb.org","*.cryptodb.org","*.eupathdb.org","*.fungidb.org","*.giardiadb.org","*.hostdb.org","*.microsporidiadb.org","*.orthomcl.org","*.piroplasmadb.org","*.plasmodb.org","*.schistodb.net","*.toxodb.org","*.trichdb.org","*.tritrypdb.org","*.clinepidb.org","*.microbiomedb.org","*.vectorbase.org","*.veupathdb.org"] |
-  (.allowedClients[] | select(.clientId == $service_client_id) |  .clientSecrets) = [$service_client_secret] |
   .keyStoreFile = $signing_key_store |
   .keyStorePassPhrase = $signing_key_store_pw |
   .authenticatorConfig.login = $db_login | 
