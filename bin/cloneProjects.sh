@@ -2,7 +2,7 @@
 ####################################################################
 ##
 ##  Checks out MicrobiomeDB projects and sets branches as
-##  appropriate for the current build.
+##  appropriate for the preferred build.
 ##
 ##  NOTE: this is a work in progress; currently can use master
 ##    for most projects but some have development branches for
@@ -10,11 +10,14 @@
 ##
 ####################################################################
 
-releaseBranch=$1
-if [ "$releaseBranch" = "" ]; then
-    releaseBranch=master
+dbPlatform=$1
+if [ "$dbPlatform" = "oracle" ] || [ "$dbPlatform" = "postgres" ]; then
+  echo "Setting project branches for $dbPlatform"
+else
+  echo "USAGE: cloneProjects.sh <dbPlatform>"
+  echo "   dbPlatform must be 'oracle' or 'postgres'"
+  exit 1
 fi
-echo "Using release branch '$releaseBranch'"
 
 scriptDir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 projectHome=$(realpath $scriptDir/../project_home)
@@ -23,17 +26,36 @@ echo "Creating $projectHome"
 mkdir -p $projectHome
 cd $projectHome
 
-if [ ! -d .tsrc ]; then
-    echo "Initializing project_home"
-    tsrc init https://github.com/VEuPathDB/tsrc.git --group microbiomeSite
-else
-    echo "Skipping project_home initialization; already initialized"
-fi
+projects=(\
+  CBIL \
+  EbrcModelCommon \
+  EbrcWebsiteCommon \
+  EbrcWebSvcCommon \
+  FgpUtil \
+  install \
+  MicrobiomeDatasets \
+  MicrobiomeModel \
+  MicrobiomePresenters \
+  MicrobiomeWebsite \
+  OAuth2Server \
+  ReFlow \
+  WDK \
+  WSF \
+)
 
-echo "Checking out all projects to $releaseBranch"
-tsrc foreach -- git checkout $releaseBranch
-
-git clone https://github.com/VEuPathDB/OAuth2Server.git
+for project in "${projects[@]}"; do
+  if [ -d $project ]; then
+    echo "Skipping clone of ${project}; already exists"
+    echo "Checking out master branch of $project"
+    cd $project
+    git pull
+    git checkout master
+    cd ..
+  else
+    echo "Cloning $project"
+    git clone https://github.com/VEuPathDB/${project}.git
+  fi
+done
 
 j21tc9Projects=(\
   install \
@@ -51,7 +73,18 @@ for project in "${j21tc9Projects[@]}"; do
   cd ..
 done
 
-cd EbrcModelCommon
-git pull
-git checkout standalone-mbio-postgres
-cd ..
+# handle projects with special branches for postgres
+if [ "$dbPlatform" = "postgres" ]; then
+
+  pgProjects=(\
+    EbrcModelCommon \
+  )
+
+  for project in "${pgProjects[@]}"; do
+    echo "Checking out standalone-mbio-postgres branch of $project"
+    cd $project
+    git pull
+    git checkout standalone-mbio-postgres
+    cd ..
+  done
+fi
