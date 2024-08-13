@@ -16,6 +16,8 @@ Since the services run under Docker, you must have a local docker installation (
 
 To access the deployed website, Traefik is used with a domain that resolves via DNS to locahost.  See 'Deploying the Microbiome Stack' for instructions.
 
+If you do not already have a private key file for signing OAuth bearer tokens, see [the instructions here](https://github.com/VEuPathDB/OAuth2Server?tab=readme-ov-file#generating-private-keys-for-signing-bearer-tokens) to create the needed pkcs12 file.  To build the code that creates the file you will need Java 11+ and Maven 3+.
+
 ## Building the WDK/OAuth Image
 
 1. Clone this repo.
@@ -25,7 +27,13 @@ To access the deployed website, Traefik is used with a domain that resolves via 
 
 ## Host Machine Setup
 
-The stand-alone MicrobiomeDB docker compose stack relies heavily on bind mounts to directories on the parent machine.  
+The stand-alone MicrobiomeDB docker compose stack relies heavily on bind mounts to directories on the parent machine.  There is a "standard" directory structure that holds the pkcs12 signature file, download files, tmp files, application logs, and persistent minio and postgres data (Oracle data remains on VEuPathDB servers as configured).  You must choose a root directory to store this data, then run the following script to build out the directory structure:
+```
+> bin/buildMountedDirs.sh <dataStorageRootDirectory>
+```
+There is only one configuration file required (other configuration is pulled from the runtime environment), the signing keys for OAuth bearer tokens.  See instructions here for how to generate this file, then move it to `<dataStorageRootDirectory>/secrets/oauth-keys.pkcs12`.
+
+Use the same value you used above for the $DATA_STORAGE_ROOT_DIR env variable when configuring your compose stack below.
 
 ## Compose Stack Configuration (runtime environment and configuration files)
 
