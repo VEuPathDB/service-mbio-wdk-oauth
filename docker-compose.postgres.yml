@@ -1,0 +1,44 @@
+
+#####################
+####  Database   ####
+#####################
+services:
+
+  vdi:
+    depends_on:
+      - edapostgres
+
+  eda:
+    depends_on:
+      - edapostgres
+
+  wdk:
+    depends_on:
+      - edapostgres
+
+  edapostgres:
+    build:
+      context: ./postgres-build
+    environment:
+      POSTGRES_USER: ${USER_DB_USER:?}
+      POSTGRES_PASSWORD: ${USER_DB_PASS:?}
+      POSTGRES_DB: eda
+      PGPORT: 5434
+      VDI_SCHEMA_SUFFIX: ${VDI_SCHEMA_SUFFIX}
+      VDI_DB_PASSWD: ${USER_DB_PASS:?}
+
+    networks:
+      - internal
+    volumes:
+      - type: bind
+        source: ${POSTGRES_DATA_DIR}
+        target: /var/lib/postgresql/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=${VDI_POSTGRES_WATCHTOWER:-false}"
+    ports:
+      - 5434:5434
+    healthcheck:
+      test: [ "nc", "-zv", "localhost", "5434" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5

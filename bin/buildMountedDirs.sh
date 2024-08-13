@@ -12,7 +12,7 @@
 
 mkdir -p /var/www/Common
 
-cd /var/www
+cd /var/www/
 
 mkdir Common/apiSiteFilesMirror
 mkdir Common/apiSiteFilesMirror/webServices

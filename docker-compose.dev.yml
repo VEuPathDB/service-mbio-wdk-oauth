@@ -58,7 +58,7 @@ services:
     - rabbitmq
     volumes:
       - type: bind
-        source: ${VDI_MINIO_DATA_DIR:-/var/www/Common/persistentData/minio}
+        source: ${VDI_MINIO_DATA_DIR:-$LOCAL_MINIO_DIR}
         target: ${VDI_MINIO_DATA_MOUNT:-/data}
     environment:
       MINIO_ROOT_USER: ${S3_ACCESS_TOKEN:?}
@@ -111,17 +111,11 @@ services:
       timeout: 10s
       retries: 5
 
-  cache-db:
-    ports:
-    - "5432:5432"
-
   kafka:
     ports:
     - "9092:9092"
 
   vdi:
-    build:
-      context: .
     depends_on:
     - cache-db
     - kafka
