@@ -10,29 +10,42 @@
 ##
 ################################################################################
 
-mkdir -p /var/www/Common
+# check for input var existence
+if [ "$1" = "" ]; then
+  echo
+  echo "USAGE: buildMountedDirs.sh <siteDataDir>
+  echo
+  echo "   Typical input location is /var/www/Common"
+  echo
+  exit 1
+fi
 
-cd /var/www/
+siteDataDir=$1
 
-mkdir Common/apiSiteFilesMirror
-mkdir Common/apiSiteFilesMirror/webServices
-mkdir Common/apiSiteFilesMirror/downloadSite
+if [ ! -d $siteDataDir ]; then
+  echo "Error: $siteDataDir does not exist"
+  exit 2
+fi
 
-mkdir Common/userDatasets
+cd $siteDataDir
 
-mkdir Common/secrets
+mkdir -p apiSiteFilesMirror
+mkdir -p apiSiteFilesMirror/webServices
+mkdir -p apiSiteFilesMirror/downloadSite
 
-# The following are config files required by WDK/OAuth (see docs)
-#Common/secrets/cacerts
-#Common/secrets/oauth-keys.pkcs12
-#Common/secrets/wdkSecretKey.txt
+mkdir -p userDatasets
 
-mkdir Common/logs
-mkdir Common/logs/nginx
-mkdir Common/logs/tomcat
+mkdir -p secrets
 
-mkdir Common/persistentData
-mkdir Common/persistentData/minio
+# The following config file is required by OAuth (see docs)
+#secrets/oauth-keys.pkcs12
 
-mkdir Common/tmp
-mkdir Common/tmp/wdkStepAnalysisJobs
+mkdir -p logs
+mkdir -p logs/nginx
+mkdir -p logs/tomcat
+
+mkdir -p persistentData
+mkdir -p persistentData/minio
+
+mkdir -p tmp
+mkdir -p tmp/wdkStepAnalysisJobs

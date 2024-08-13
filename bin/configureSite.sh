@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# check for input var existance
+# check for input var existence
 if [ "$1" = "" ] || [ "$2" = "" ]; then
   echo
   echo "USAGE: configureSite.sh <filesDir> <siteDir>"

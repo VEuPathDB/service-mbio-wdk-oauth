@@ -24,17 +24,17 @@ services:
 
     volumes:
       - type: bind
-        source: ${API_SITE_WEB_SERVICE_FILES_DIR:-/var/www/Common/apiSiteFilesMirror/webServices}
+        source: ${API_SITE_WEB_SERVICE_FILES_DIR:-${DATA_STORAGE_ROOT_DIR}/apiSiteFilesMirror/webServices}
         target: ${API_SITE_WEB_SERVICE_FILES_MOUNT:-/webServiceFiles}
         read_only: true
       - type: bind
-        source: ${STEP_ANALYSIS_JOBS_DIR:-/var/www/Common/tmp/wdkStepAnalysisJobs}
+        source: ${STEP_ANALYSIS_JOBS_DIR:-${DATA_STORAGE_ROOT_DIR}/tmp/wdkStepAnalysisJobs}
         target: ${STEP_ANALYSIS_JOBS_MOUNT:-/stepAnalysisJobs}
       - type: bind
-        source: ${LOGS_DIR:-/var/www/Common/logs}
+        source: ${LOGS_DIR:-${DATA_STORAGE_ROOT_DIR}/logs}
         target: ${LOGS_MOUNT:-/opt/logs}
       - type: bind
-        source: ${SECRETS_DIR:-/var/www/Common/secrets}
+        source: ${SECRETS_DIR:-${DATA_STORAGE_ROOT_DIR}/secrets}
         target: ${SECRETS_MOUNT:-/secrets}
         read_only: true
 
@@ -47,8 +47,7 @@ services:
       NGINX_LOGS_DIR: ${LOGS_MOUNT:-/opt/logs}/nginx
 
       # required mounted secret value files
-      WDK_SECRET_KEY_FILE: ${SECRETS_MOUNT:-/secrets}/${WDK_SECRET_KEY_FILENAME:-wdkSecretKey.txt}
-      WDK_CACERTS_FILE: ${SECRETS_MOUNT:-/secrets}/${WDK_CACERTS_FILENAME:-cacerts}
+      WDK_SECRET_KEY: ${WDK_SECRET_KEY:?}
       OAUTH_SIGNING_KEY_STORE: ${SECRETS_MOUNT:-/secrets}/${OAUTH_SIGNING_KEY_STORE_FILENAME:-oauth-keys.pkcs12}
       OAUTH_SIGNING_KEY_STORE_PW: ${OAUTH_SIGNING_KEY_STORE_PW}
       OAUTH_DB_PLATFORM: ${OAUTH_DB_PLATFORM}
@@ -113,11 +112,11 @@ services:
 
     volumes:
       - type: bind
-        source: ${MACHINE_BINARY_FILES_DIR:-/var/www/Common/apiSiteFilesMirror/webServices}
+        source: ${MACHINE_BINARY_FILES_DIR:-${DATA_STORAGE_ROOT_DIR}/apiSiteFilesMirror/webServices}
         target: ${SERVICE_BINARY_FILES_MOUNT:-/binaryFiles}
         read_only: true
       - type: bind
-        source: ${DOWNLOAD_FILES_DIR:-/var/www/Common/apiSiteFilesMirror/downloadSite}
+        source: ${DOWNLOAD_FILES_DIR:-${DATA_STORAGE_ROOT_DIR}/apiSiteFilesMirror/downloadSite}
         target: /downloadFiles
         read_only: true
     environment:
@@ -175,7 +174,7 @@ services:
       USER_DB_SCHEMA: ${USER_DB_SCHEMA:-userlogins5}
 
       # Auth Secret (needed along with user/acct DBs for auth)
-      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY}
+      AUTH_SECRET_KEY: ${WDK_SECRET_KEY}
 
       # OAuth configuration for fetching user data
       OAUTH_URL: http://oauth-internal/oauth
@@ -408,7 +407,7 @@ services:
 
       # Rest Service
       SERVER_PORT: ${VDI_SERVICE_HTTP_PORT:-80}
-      AUTH_SECRET_KEY: ${AUTH_SECRET_KEY:?}
+      AUTH_SECRET_KEY: ${WDK_SECRET_KEY:?}
       ADMIN_AUTH_TOKEN: ${ADMIN_AUTH_TOKEN:?}
       ENABLE_CORS: ${ENABLE_CORS:-false}
 
@@ -588,7 +587,7 @@ services:
     - "com.centurylinklabs.watchtower.enable=${PLUGIN_BIOM_WATCHTOWER:-false}"
     volumes:
     - type: bind
-      source: ${DATASET_DIRECTORY_SOURCE_PATH:-/var/www/Common/userDatasets/vdi_datasets_${VDI_SCHEMA_SUFFIX}}
+      source: ${DATASET_DIRECTORY_SOURCE_PATH:-${DATA_STORAGE_ROOT_DIR}/userDatasets/vdi_datasets_${VDI_SCHEMA_SUFFIX}}
       target: ${DATASET_DIRECTORY_TARGET_PATH:?}
     environment:
       LDAP_SERVER: ${LDAP_SERVER:?}
