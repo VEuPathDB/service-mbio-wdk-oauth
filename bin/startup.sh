@@ -22,18 +22,24 @@ awaitWebapp() {
 
 gracefulShutdown() {
   log=/opt/logs/exit-catch.log
-  echo "Shutting down application..." > $log
-  echo "Found nginx PID to be: $(cat /var/run/nginx.pid)" >> $log
-  echo "Found tomcat PID to be: $(ps -ef | grep tomcat | grep -v grep | awk '{ print $1 }')"
+  echo 
+  echo "Found nginx PID to be: $(cat /var/run/nginx.pid)" &> $log
+  echo "Found tomcat PID to be: $(ps -ef | grep tomcat | grep -v grep | awk '{ print $1 }')" &>> $log
+  echo "Shutting down servers..." &>> $log
   nginx -s stop &>> $log
   /opt/apache-tomcat/bin/shutdown.sh &>> $log
   for attempts in {1..20}; do
     nginxPid=$(cat /var/run/nginx.pid)
     tomcatPid=$(ps -ef | grep tomcat | grep -v grep | awk '{ print $1 }')
     echo "nginx PID = ${nginxPid}, tomcat PID = ${tomcatPid}" &>> $log
+    if [ "$nginxPid" = "" ] && [ "$tomcatPid" = "" ]; then
+      echo "Tomcat and nginx gracefully shut down." &>> $log
+      exit 0
+    fi
     sleep 2
   done
-  exit
+  echo "Tomcat and nginx shutdown will be forced." &>> $log
+  exit 1
 }
 
 echo "Starting up WDK and OAuth services..." \
@@ -48,4 +54,4 @@ echo "Starting up WDK and OAuth services..." \
     && echo "WDK webapp deployed.  Starting up nginx" \
     && nginx \
     && echo "Services running..." \
-    && exec bash -c 'sleep infinity & wait'
+    && tail -f /dev/null & wait ${!}
