@@ -21,4 +21,9 @@ hosts:
   - wdk
   - vdi
   - plugin-biom
+  ares14.penn.apidb.org:1521:
+  - eda
+  - wdk
+  - vdi
+  - plugin-biom
   
