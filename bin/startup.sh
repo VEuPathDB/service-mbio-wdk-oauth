@@ -21,11 +21,18 @@ awaitWebapp() {
 }
 
 gracefulShutdown() {
-  echo "Shutting down application..." > /opt/logs/exit-catch.log
-  nginx -s stop
-  /opt/apache-tomcat/bin/shutdown.sh
-  # give webapps a reasonable amount of time to shut down
-  sleep 5
+  log=/opt/logs/exit-catch.log
+  echo "Shutting down application..." > $log
+  echo "Found nginx PID to be: $(cat /var/run/nginx.pid)" >> $log
+  echo "Found tomcat PID to be: $(ps -ef | grep tomcat | grep -v grep | awk '{ print $1 }')"
+  nginx -s stop &>> $log
+  /opt/apache-tomcat/bin/shutdown.sh &>> $log
+  for attempts in {1..20}; do
+    nginxPid=$(cat /var/run/nginx.pid)
+    tomcatPid=$(ps -ef | grep tomcat | grep -v grep | awk '{ print $1 }')
+    echo "nginx PID = ${nginxPid}, tomcat PID = ${tomcatPid}" &>> $log
+    sleep 2
+  done
   exit
 }
 

@@ -4,37 +4,7 @@ services:
     depends_on:
       - tunnel_ares8_penn_apidb_org_1521
       - tunnel_ares11_penn_apidb_org_1521
-  plugin-bigwig:
-    depends_on:
-      - tunnel_ds1_apidb_org_389
-      - tunnel_ds4_apidb_org_389
-      - tunnel_ares8_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
   plugin-biom:
-    depends_on:
-      - tunnel_ds1_apidb_org_389
-      - tunnel_ds4_apidb_org_389
-      - tunnel_ares8_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
-  plugin-example:
-    depends_on:
-      - tunnel_ds1_apidb_org_389
-      - tunnel_ds4_apidb_org_389
-      - tunnel_ares8_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
-  plugin-genelist:
-    depends_on:
-      - tunnel_ds1_apidb_org_389
-      - tunnel_ds4_apidb_org_389
-      - tunnel_ares8_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
-  plugin-isasimple:
-    depends_on:
-      - tunnel_ds1_apidb_org_389
-      - tunnel_ds4_apidb_org_389
-      - tunnel_ares8_penn_apidb_org_1521
-      - tunnel_ares11_penn_apidb_org_1521
-  plugin-rnaseq:
     depends_on:
       - tunnel_ds1_apidb_org_389
       - tunnel_ds4_apidb_org_389

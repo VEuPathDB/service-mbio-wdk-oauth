@@ -7,38 +7,18 @@
 hosts:
   ds1.apidb.org:389:
   - vdi
-  - plugin-bigwig
   - plugin-biom
-  - plugin-example
-  - plugin-genelist
-  - plugin-isasimple
-  - plugin-rnaseq
   ds4.apidb.org:389:
   - vdi
-  - plugin-bigwig
   - plugin-biom
-  - plugin-example
-  - plugin-genelist
-  - plugin-isasimple
-  - plugin-rnaseq
   ares8.penn.apidb.org:1521:
   - eda
   - wdk
   - vdi
-  - plugin-bigwig
   - plugin-biom
-  - plugin-example
-  - plugin-genelist
-  - plugin-isasimple
-  - plugin-rnaseq
   ares11.penn.apidb.org:1521:
   - eda
   - wdk
   - vdi
-  - plugin-bigwig
   - plugin-biom
-  - plugin-example
-  - plugin-genelist
-  - plugin-isasimple
-  - plugin-rnaseq
   
