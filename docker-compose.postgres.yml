@@ -31,7 +31,7 @@ services:
       - internal
     volumes:
       - type: bind
-        source: ${POSTGRES_DATA_DIR}
+        source: ${DATA_STORAGE_ROOT_DIR}/persistentData/postgres
         target: /var/lib/postgresql/data
     labels:
       - "com.centurylinklabs.watchtower.enable=${VDI_POSTGRES_WATCHTOWER:-false}"

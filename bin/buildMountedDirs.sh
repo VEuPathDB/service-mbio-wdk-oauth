@@ -46,6 +46,7 @@ mkdir -p logs/tomcat
 
 mkdir -p persistentData
 mkdir -p persistentData/minio
+mkdir -p persistentData/postgres
 
 mkdir -p tmp
 mkdir -p tmp/wdkStepAnalysisJobs

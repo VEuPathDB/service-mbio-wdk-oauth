@@ -12,3 +12,9 @@ oracleup: oracledown
 
 oracledown:
 	docker compose -p mbio_local -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.ssh.yml --env-file env.dev.ora.base --env-file env.dev.ora.custom down -v
+
+postgresup: postgresdown
+	(docker compose -p mbio_local -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.ssh.yml -f docker-compose.postgres.yml --env-file env.dev.pg.base --env-file env.dev.pg.custom up --remove-orphans &)
+
+postgresdown:
+	docker compose -p mbio_local -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.ssh.yml -f docker-compose.postgres.yml --env-file env.dev.pg.base --env-file env.dev.pg.custom down -v

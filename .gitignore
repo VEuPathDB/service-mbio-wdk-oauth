@@ -2,5 +2,5 @@ project_home
 *~
 .env
 env.local
-env.dev.ora.custom
+env.dev.*.custom
 .project

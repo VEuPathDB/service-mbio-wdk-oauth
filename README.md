@@ -31,7 +31,7 @@ The stand-alone MicrobiomeDB docker compose stack relies heavily on bind mounts 
 ```
 > bin/buildMountedDirs.sh <dataStorageRootDirectory>
 ```
-There is only one configuration file required (other configuration is pulled from the runtime environment), the signing keys for OAuth bearer tokens.  See instructions here for how to generate this file, then move it to `<dataStorageRootDirectory>/secrets/oauth-keys.pkcs12`.
+There is only one configuration file required (other configuration is pulled from the runtime environment), the signing keys for OAuth bearer tokens.  See instructions here for how to generate this file, then move it to `<dataStorageRootDirectory>/secrets/oauth-keys.pkcs12`.  Note: you do not need to reclone the `OAuth2Server` project; it should already exist in `project_home/`.
 
 Use the same value you used above for the $DATA_STORAGE_ROOT_DIR env variable when configuring your compose stack below.
 
