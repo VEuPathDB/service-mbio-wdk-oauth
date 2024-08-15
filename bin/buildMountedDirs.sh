@@ -13,7 +13,7 @@
 # check for input var existence
 if [ "$1" = "" ]; then
   echo
-  echo "USAGE: buildMountedDirs.sh <siteDataDir>
+  echo "USAGE: buildMountedDirs.sh <siteDataDir>"
   echo
   echo "   Typical input location is /var/www/Common"
   echo
@@ -28,25 +28,25 @@ if [ ! -d $siteDataDir ]; then
 fi
 
 cd $siteDataDir
+currentDir=$(pwd)
 
-mkdir -p apiSiteFilesMirror
-mkdir -p apiSiteFilesMirror/webServices
-mkdir -p apiSiteFilesMirror/downloadSite
+dirs=(\
+  apiSiteFilesMirror \
+  apiSiteFilesMirror/downloadSite \
+  apiSiteFilesMirror/webServices \
+  logs \
+  logs/nginx \
+  logs/tomcat \
+  persistentData \
+  persistentData/minio \
+  persistentData/postgres \
+  secrets \
+  tmp \
+  tmp/wdkStepAnalysisJobs \
+  userDatasets \
+)
 
-mkdir -p userDatasets
-
-mkdir -p secrets
-
-# The following config file is required by OAuth (see docs)
-#secrets/oauth-keys.pkcs12
-
-mkdir -p logs
-mkdir -p logs/nginx
-mkdir -p logs/tomcat
-
-mkdir -p persistentData
-mkdir -p persistentData/minio
-mkdir -p persistentData/postgres
-
-mkdir -p tmp
-mkdir -p tmp/wdkStepAnalysisJobs
+for dir in "${dirs[@]}"; do
+  echo "Creating $currentDir/$dir"
+  mkdir -p $currentDir/$dir
+done

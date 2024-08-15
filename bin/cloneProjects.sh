@@ -53,7 +53,7 @@ for project in "${projects[@]}"; do
     cd ..
   else
     echo "Cloning $project"
-    git clone https://github.com/VEuPathDB/${project}.git
+    git clone git@github.com:VEuPathDB/${project}.git
   fi
 done
 
