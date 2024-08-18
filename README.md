@@ -21,7 +21,7 @@ To generate some configuration values and a private key file, you will need to u
 1. Clone this repo and `cd` into its main directory.
 2. Decide whether you will connect to existing remote Oracle data stores or to local PostgreSQL data stores.
 3. Run the script `bin/cloneProjects.sh <oracle|postgres>` to build out a project_home containing the project dependencies of MicrobiomeDB needed for your database platform.  Some of these projects may be private and require special github credentials to access.  Some of the projects are checked out as master but others are on branches (DB platform choice influences the branch in one repo).
-4. Run `make docker`.  In certain cases, `make dockernocache` is necessary but this is rare.
+4. Run `make docker` (will take 5-10 minutes). In certain cases, `make dockernocache` is necessary but this is rare.
 5. This will create a local docker image for WDK/OAuth tagged with `mbio-wdk:latest`.  If you want to be able to pull this image remotely you will have to take care of deploying it to DockerHub or another repository.
 
 ## Host Machine Setup ##
