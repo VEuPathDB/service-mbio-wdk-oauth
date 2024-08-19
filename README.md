@@ -116,6 +116,13 @@ To forward your SSH keys for login authentication, you need to have ssh-agent ru
 > ssh-add -l
 ```
 
+Also, SSH Agent is handled differently on Mac OSX, requiring custom settings for SSH Socket.  If you are on Mac, uncomment the following two lines in `env.dev.ora.custom`:
+
+```
+SSH_AUTH_SOCKET_SOURCE=/run/host-services/ssh-auth.sock
+SSH_AUTH_SOCKET_TARGET=/ssh-agent
+```
+
 The following two values are related to VDI configuration (user dataset installation).  To work independently of other developers, you must have a dedicated pair of VDI schemas assigned to you, or agree to share a pair of schemas.
 
 ```
