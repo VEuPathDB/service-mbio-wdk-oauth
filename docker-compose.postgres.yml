@@ -6,26 +6,29 @@ services:
 
   vdi:
     depends_on:
-      - edapostgres
+      edapostgres:
+        condition: service_healthy
 
   eda:
     depends_on:
-      - edapostgres
+      edapostgres:
+        condition: service_healthy
 
   wdk:
     depends_on:
-      - edapostgres
+      edapostgres:
+        condition: service_healthy
 
   edapostgres:
     build:
       context: ./postgres-build
     environment:
-      POSTGRES_USER: ${USER_DB_USER:?}
-      POSTGRES_PASSWORD: ${USER_DB_PASS:?}
+      POSTGRES_USER: ${POSTGRES_ROOT_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
       POSTGRES_DB: eda
       PGPORT: 5434
       VDI_SCHEMA_SUFFIX: ${VDI_SCHEMA_SUFFIX}
-      VDI_DB_PASSWD: ${USER_DB_PASS:?}
+      VDI_DB_PASSWD: ${DB_CONNECTION_PASS_MICROBIOME}
 
     networks:
       - internal
@@ -38,7 +41,8 @@ services:
     ports:
       - 5434:5434
     healthcheck:
-      test: [ "nc", "-zv", "localhost", "5434" ]
-      interval: 30s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_ROOT_USER} -d eda -p 5434"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
       timeout: 10s
-      retries: 5
