@@ -137,7 +137,7 @@ Important Note: Once you decide on a VDI schema name, you must create an install
 ## Deploying the MicrobiomeDB Stack
 
 Please review the following checklist before continuing:
-1. Domains like `any.local.apidb.org` resolve to localhost (127.0.0.1) on your machine
+1. Domains like `any.local.apidb.org` resolve to localhost (127.0.0.1) on your machine.  Check with `nslookup any.local.apidb.org`
 2. The Traefik container is still running per instructions above
 3. You have configured your `env.dev.<platform>.custom` file per instructions above
 
