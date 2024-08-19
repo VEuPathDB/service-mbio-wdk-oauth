@@ -56,6 +56,7 @@ To access the deployed website, Traefik is used with a domain (*.local.apidb.org
 ```
 > git clone git@github.com:VEuPathDB/docker-traefik.git
 > cd docker-traefik
+> docker network create traefik
 > docker compose up
 ```
 
