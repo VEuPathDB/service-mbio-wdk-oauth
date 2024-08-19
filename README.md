@@ -68,6 +68,8 @@ Note your DNS provider must resolve *.local.apidb.org to localhost.  To test thi
 
 You should see 127.0.0.1 as the resolved IP Address.  If not you may need to adjust your DNS settings.  Google's DNS (8.8.8.8) has been shown to resolve this domain properly.
 
+Fully test traefik by putting `https://traefik.local.apidb.org:8443/` in your browser.  You should get the traefik console.
+
 ## Docker Compose Stack Configuration (runtime environment) ##
 
 Before deploying the application, you must build a set of files that determine the runtime environment.  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control (GitHub).  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy your platform's `env.dev.<platform>.sample` file to `env.dev.<platform>.custom` and populate the values for the variables within.  In this section, we discuss DB-platform-agnostic config values.  See below for DB-platform-specific advice.
