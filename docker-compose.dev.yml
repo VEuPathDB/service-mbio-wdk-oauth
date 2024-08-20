@@ -16,8 +16,8 @@ services:
     networks:
       - internal
     environment:
-      MINIO_ROOT_USER: ${COMPUTE_S3_ACCESS_TOKEN}
-      MINIO_ROOT_PASSWORD: ${COMPUTE_S3_SECRET_KEY}
+      MINIO_ROOT_USER: ${COMPUTE_S3_ACCESS_TOKEN:?}
+      MINIO_ROOT_PASSWORD: ${COMPUTE_S3_SECRET_KEY:?}
 
   minio-create-buckets:
     image: minio/mc:RELEASE.2024-07-31T15-58-33Z
