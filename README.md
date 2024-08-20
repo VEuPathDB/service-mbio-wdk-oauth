@@ -56,6 +56,7 @@ To access the deployed website, Traefik is used with a domain (*.local.apidb.org
 ```
 > git clone git@github.com:VEuPathDB/docker-traefik.git
 > cd docker-traefik
+> docker network create traefik
 > docker compose up
 ```
 
@@ -66,6 +67,8 @@ Note your DNS provider must resolve *.local.apidb.org to localhost.  To test thi
 ```
 
 You should see 127.0.0.1 as the resolved IP Address.  If not you may need to adjust your DNS settings.  Google's DNS (8.8.8.8) has been shown to resolve this domain properly.
+
+Fully test traefik by putting `https://traefik.local.apidb.org:8443/` in your browser.  You should get the traefik console.
 
 ## Docker Compose Stack Configuration (runtime environment) ##
 
@@ -113,6 +116,13 @@ To forward your SSH keys for login authentication, you need to have ssh-agent ru
 
 ```
 > ssh-add -l
+```
+
+Also, SSH Agent is handled differently on Mac OSX, requiring custom settings for SSH Socket.  If you are on Mac, uncomment the following two lines in `env.dev.ora.custom`:
+
+```
+SSH_AUTH_SOCKET_SOURCE=/run/host-services/ssh-auth.sock
+SSH_AUTH_SOCKET_TARGET=/ssh-agent
 ```
 
 The following two values are related to VDI configuration (user dataset installation).  To work independently of other developers, you must have a dedicated pair of VDI schemas assigned to you, or agree to share a pair of schemas.
