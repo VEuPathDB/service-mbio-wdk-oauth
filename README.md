@@ -133,7 +133,14 @@ Important Note: Once you decide on a VDI schema name, you must create an install
 
 ### PostgreSQL (local data storage)
 
-*Coming Soon!*
+There are two variables needed to configure postgres. These values are used as root credentials and to access the database in the EDA and WDK. 
+
+In a production environment, these should be set to sufficiently secure values, similar to the secrets above. In dev, they can be set to 
+```
+POSTGRES_ROOT_USER=
+POSTGRES_ROOT_PASSWORD=
+
+```
 
 ## Deploying the MicrobiomeDB Stack
 
