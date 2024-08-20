@@ -21,8 +21,9 @@ To generate some configuration values and a private key file, you will need to u
 1. Clone this repo and `cd` into its main directory.
 2. Decide whether you will connect to existing remote Oracle data stores or to local PostgreSQL data stores.
 3. Run the script `bin/cloneProjects.sh <oracle|postgres>` to build out a project_home containing the project dependencies of MicrobiomeDB needed for your database platform.  Some of these projects may be private and require special github credentials to access.  Some of the projects are checked out as master but others are on branches (DB platform choice influences the branch in one repo).
-4. Run `make docker`.  In certain cases, `make dockernocache` is necessary but this is rare.
-5. This will create a local docker image for WDK/OAuth tagged with `mbio-wdk:latest`.  If you want to be able to pull this image remotely you will have to take care of deploying it to DockerHub or another repository.
+4. Run `make docker` (will take 5-10 minutes). In certain cases, `make dockernocache` is necessary but this is rare.
+5. NOTE: To build the VEuPathDB software, you will need to set Github credentials with proper permissions in your build environment.  [See here for how to create and set these values](https://veupathdb.atlassian.net/wiki/spaces/TECH/pages/47841323/Create+a+Github+user+token).
+6. This will create a local docker image for WDK/OAuth tagged with `mbio-wdk:latest`.  If you want to be able to pull this image remotely you will have to take care of deploying it to DockerHub or another repository.
 
 ## Host Machine Setup ##
 
@@ -55,6 +56,7 @@ To access the deployed website, Traefik is used with a domain (*.local.apidb.org
 ```
 > git clone git@github.com:VEuPathDB/docker-traefik.git
 > cd docker-traefik
+> docker network create traefik
 > docker compose up
 ```
 
@@ -66,9 +68,11 @@ Note your DNS provider must resolve *.local.apidb.org to localhost.  To test thi
 
 You should see 127.0.0.1 as the resolved IP Address.  If not you may need to adjust your DNS settings.  Google's DNS (8.8.8.8) has been shown to resolve this domain properly.
 
+Fully test traefik by putting `https://traefik.local.apidb.org:8443/` in your browser.  You should get the traefik console.
+
 ## Docker Compose Stack Configuration (runtime environment) ##
 
-Before deploying the application, you must build a set of files that determine the runtime environment.  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control.  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy your platform's `env.dev.<platform>.sample` file to `env.dev.<platform>.custom` and populate the values for the variables within.  In this section, we discuss DB-platform-agnostic config values.  See below for DB-platform-specific advice.
+Before deploying the application, you must build a set of files that determine the runtime environment.  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control (GitHub).  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy your platform's `env.dev.<platform>.sample` file to `env.dev.<platform>.custom` and populate the values for the variables within.  In this section, we discuss DB-platform-agnostic config values.  See below for DB-platform-specific advice.
 
 ```
   Values we already know:
@@ -114,6 +118,13 @@ To forward your SSH keys for login authentication, you need to have ssh-agent ru
 > ssh-add -l
 ```
 
+Also, SSH Agent is handled differently on Mac OSX, requiring custom settings for SSH Socket.  If you are on Mac, uncomment the following two lines in `env.dev.ora.custom`:
+
+```
+SSH_AUTH_SOCKET_SOURCE=/run/host-services/ssh-auth.sock
+SSH_AUTH_SOCKET_TARGET=/ssh-agent
+```
+
 The following two values are related to VDI configuration (user dataset installation).  To work independently of other developers, you must have a dedicated pair of VDI schemas assigned to you, or agree to share a pair of schemas.
 
 ```
@@ -137,7 +148,7 @@ Important Note: Once you decide on a VDI schema name, you must create an install
 ## Deploying the MicrobiomeDB Stack
 
 Please review the following checklist before continuing:
-1. Domains like `any.local.apidb.org` resolve to localhost (127.0.0.1) on your machine
+1. Domains like `any.local.apidb.org` resolve to localhost (127.0.0.1) on your machine.  Check with `nslookup any.local.apidb.org`
 2. The Traefik container is still running per instructions above
 3. You have configured your `env.dev.<platform>.custom` file per instructions above
 

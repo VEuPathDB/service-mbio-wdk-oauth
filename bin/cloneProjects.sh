@@ -20,11 +20,11 @@ else
 fi
 
 scriptDir=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
-projectHome=$(realpath $scriptDir/../project_home)
+projectHomeParent=$(realpath $scriptDir/..)
 
-echo "Creating $projectHome"
-mkdir -p $projectHome
-cd $projectHome
+echo "Creating $projectHomeParent/project_home"
+mkdir -p $projectHomeParent/project_home
+cd $projectHomeParent/project_home
 
 projects=(\
   CBIL \
