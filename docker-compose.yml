@@ -47,7 +47,7 @@ services:
       NGINX_LOGS_DIR: ${LOGS_MOUNT:-/opt/logs}/nginx
 
       # required mounted secret value files
-      WDK_SECRET_KEY: ${WDK_SECRET_KEY?}
+      WDK_SECRET_KEY: ${WDK_SECRET_KEY:?}
       OAUTH_SIGNING_KEY_STORE: ${SECRETS_MOUNT:-/secrets}/${OAUTH_SIGNING_KEY_STORE_FILENAME:-oauth-keys.pkcs12}
       OAUTH_SIGNING_KEY_STORE_PW: ${OAUTH_SIGNING_KEY_STORE_PW}
       OAUTH_DB_PLATFORM: ${OAUTH_DB_PLATFORM}
@@ -62,6 +62,9 @@ services:
       SMTP_HOST: ${SMTP_HOST}
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_TLS: ${SMTP_TLS}
+      SMTP_PORT: ${SMTP_PORT}
+      HELP_EMAIL: ${HELP_EMAIL}
 
       # app db (WDK)
       APP_DB_LOGIN: ${APP_DB_LOGIN}
@@ -176,7 +179,7 @@ services:
       USER_DB_SCHEMA: ${USER_DB_SCHEMA:-userlogins5}
 
       # Auth Secret (needed along with user/acct DBs for auth)
-      AUTH_SECRET_KEY: ${WDK_SECRET_KEY}
+      AUTH_SECRET_KEY: ${WDK_SECRET_KEY:?}
 
       # OAuth configuration for fetching user data
       OAUTH_URL: http://oauth-internal/oauth

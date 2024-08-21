@@ -22,5 +22,8 @@ postgresdown:
 postgresclone:
 	@bin/cloneProjects.sh postgres
 
+buildpostgresimage:
+	docker compose -p mbio_local --env-file env.dev.pg.base --env-file env.dev.pg.custom -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.postgres.yml build
+
 oracleclone:
 	@bin/cloneProjects.sh oracle
