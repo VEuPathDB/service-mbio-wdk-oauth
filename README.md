@@ -70,6 +70,30 @@ You should see 127.0.0.1 as the resolved IP Address.  If not you may need to adj
 
 Fully test traefik by putting `https://traefik.local.apidb.org:8443/` in your browser.  You should get the traefik console.
 
+## SMTP Configuration
+A configured SMTP server is required for the standalone site to send e-mails. This is required for the application to:
+1. Sending a temporary password when user is registered
+2. Sending notifications when dataset access requests are updated
+3. Send error e-mails to site administrators
+
+For development environments, many SMTP providers allow free use up to a fixed number of e-mails per day.
+
+### Using MailerSend
+[MailerSend](https://app.mailersend.com) provides 100 e-mails per day using their SMTP services. In order to use it in a dev environment:
+1. Register a new account
+2. Verify your e-mail
+3. After verifying your e-mail, you should have a trial domain. Navigate to your trial domain.
+4. Once on the page for the Domain, scroll to the SMTP section, and click the "Manage" button
+5. Using the information shown, fill out the following environment variables in the `env.dev.<platform>.custom` file
+```
+SMTP_HOST=smtp.mailersend.net
+SMTP_USERNAME=<user>
+SMTP_PASSWORD=<password>
+SMTP_TLS=true
+SMTP_PORT=<port>
+HELP_EMAIL=test@<mailsender-trial-domain-name>
+```
+
 ## Docker Compose Stack Configuration (runtime environment) ##
 
 Before deploying the application, you must build a set of files that determine the runtime environment.  The `env.dev.<platform>.base` files contain most of what you need, but there are some custom values and secrets that cannot be kept in version control (GitHub).  The values you need to fill in are documented in `env.dev.<platform>.sample` files.  Copy your platform's `env.dev.<platform>.sample` file to `env.dev.<platform>.custom` and populate the values for the variables within.  In this section, we discuss DB-platform-agnostic config values.  See below for DB-platform-specific advice.
