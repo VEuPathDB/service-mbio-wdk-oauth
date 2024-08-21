@@ -78,6 +78,8 @@ if [ "$dbPlatform" = "postgres" ]; then
 
   pgProjects=(\
     EbrcModelCommon \
+    EbrcWebsiteCommon \
+    MicrobiomeModel
   )
 
   for project in "${pgProjects[@]}"; do
