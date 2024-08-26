@@ -25,7 +25,7 @@ while IFS= read -r line; do
   repo=${projectDef[0]}
   branch=${projectDef[1]}
   oldHash=${projectDef[2]}
-  
+
   newHash=$(curl -L --no-progress-meter \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \

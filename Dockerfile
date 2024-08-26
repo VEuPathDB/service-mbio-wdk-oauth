@@ -22,11 +22,22 @@ ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 WORKDIR /workspace
 
-# copy site code into container (should be checked out with cloneProjects.sh)
-COPY project_home project_home
-
 # clone build-and-deploy script repo
 RUN git clone https://github.com/VEuPathDB/gus-site-build-deploy.git
+
+# build_type determines how projects are pulled into this build
+#   - a value of "local" will use the projects in project_home
+#   - any other value will use the commits noted in the build.project.versions file
+ARG BUILD_TYPE
+
+# copy site code + project versions into container (should be checked out with cloneProjects.sh)
+#   Note if you want to use versions but project_home is non-empty, you may not maximize docker cache usage
+RUN mkdir /workspace/project_home
+COPY build.projects.versions project_hom[e] project_home
+COPY bin bin
+
+# this will move build.projects.versions to /workspace
+RUN bash bin/resolveBuildProjects.sh $BUILD_TYPE
 
 # build the site
 RUN mkdir build
@@ -54,7 +65,6 @@ RUN cd /opt \
     && curl -o /opt/apache-tomcat/lib/postgresql-42.7.3.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar
 
 # copy remaining setup files into container
-COPY bin bin
 COPY conf conf
 COPY files files
 
@@ -102,6 +112,9 @@ RUN mkdir -p /var/www/local.microbiomedb.org
 COPY --from=prep /workspace/build/mbio-site-artifact.tar.gz /var/www/local.microbiomedb.org
 RUN stat /var/www/local.microbiomedb.org/mbio-site-artifact.tar.gz
 RUN cd /var/www/local.microbiomedb.org && tar zxvf mbio-site-artifact.tar.gz
+
+# copy project versions file into accessible location
+COPY --from=prep /workspace/build.projects.versions /var/www/local.microbiomedb.org/html
 
 # copy oauth build artifacts
 COPY --from=prep /workspace/OAuth2Server/EuPathDB/target/oauth.war /opt/apache-tomcat/webapps
