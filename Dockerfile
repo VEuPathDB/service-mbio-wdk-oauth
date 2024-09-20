@@ -55,7 +55,7 @@ RUN cd /workspace/OAuth2Server && bash EuPathDB/bin/build.sh WEB-INF/OAuthConfig
 
 # download Tomcat 9 and make needed modifications
 RUN cd /opt \
-    && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz \
+    && wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.93/bin/apache-tomcat-9.0.93.tar.gz \
     && tar zxvf apache-tomcat-9.0.93.tar.gz \
     && mv apache-tomcat-9.0.93 apache-tomcat \
     && chmod 755 /opt/apache-tomcat/bin/*.sh \
